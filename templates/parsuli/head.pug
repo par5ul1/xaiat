@@ -3,16 +3,19 @@
   @Date:   2022-06-30T12:31:33-07:00
   @Filename: parsuli-head.pug
   @Last modified by:   par5ul1
-  @Last modified time: 2022-06-30T15:28:01-07:00
+  @Last modified time: 2022-07-03T10:27:44-07:00
 
 section#head
   h1 #{name}
+  //- h4 #{address}
   p
     each link, i in links.length ? links : ['']
       a(href=link, target="_blank") #{link}
       if i < links.length - 1
         +textSeparator
   p
+    a #{address}
+    +textSeparator
     a(href="mailto:" + email, target="_blank") #{email}
     +textSeparator
     a #{phone}

@@ -3,7 +3,7 @@
  * @Date:   2022-06-30T00:01:09-07:00
  * @Filename: style.css
  * @Last modified by:   par5ul1
- * @Last modified time: 2022-06-30T22:53:03-07:00
+ * @Last modified time: 2022-07-03T10:25:25-07:00
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap');
@@ -50,7 +50,7 @@ div > * {
   text-align: center;
 }
 
-#head > p {
+#head > p, h4 {
   margin: 0;
 }
 
