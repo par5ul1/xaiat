@@ -3,7 +3,7 @@
   @Date:   2022-06-30T12:31:33-07:00
   @Filename: parsuli-head.pug
   @Last modified by:   par5ul1
-  @Last modified time: 2022-07-03T10:27:44-07:00
+  @Last modified time: 2022-07-03T10:37:31-07:00
 
 section#head
   h1 #{name}
@@ -15,7 +15,9 @@ section#head
         +textSeparator
   p
     a #{address}
-    +textSeparator
+    if email && email != ""
+      +textSeparator
     a(href="mailto:" + email, target="_blank") #{email}
-    +textSeparator
+    if phone && phone != ""
+      +textSeparator
     a #{phone}
