@@ -1,0 +1,64 @@
+/**
+ * @Author: Parsa Rahimi <par5ul1>
+ * @Date:   2022-06-30T00:01:09-07:00
+ * @Filename: style.css
+ * @Last modified by:   par5ul1
+ * @Last modified time: 2022-08-11T18:08:22-07:00
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&display=swap');
+
+body {
+  padding: 0.25in;
+  font-family: "Public Sans", sans-serif;
+  /* line-height: 14pt; */
+}
+h1 {
+  font-size: 15pt;
+}
+h2 {
+  font-size: 11pt;
+}
+h3 {
+  font-size: 10pt;
+}
+h4 {
+  font-size: 10pt;
+  font-weight: normal;
+  color: grey;
+}
+p,li {
+  font-size: 10pt;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+ul {
+  margin: 0.25em;
+}
+
+div > * {
+  margin: 0;
+}
+
+#head {
+  text-align: center;
+}
+
+#head > p, h4 {
+  margin: 0;
+}
+
+#head > h1 {
+  margin: 5pt;
+}
+
+.evenly_spaced {
+  display: flex;
+  justify-content: space-between;
+}
+
+.evenly_spaced > div:nth-child(2) {
+  text-align: right;
+}

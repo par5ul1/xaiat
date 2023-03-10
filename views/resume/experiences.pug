@@ -1,0 +1,29 @@
+//-
+  @Author: Parsa Rahimi <par5ul1>
+  @Date:   2022-06-30T13:46:12-07:00
+  @Filename: projects.pug
+  @Last modified by:   par5ul1
+  @Last modified time: 2022-06-30T22:33:09-07:00
+
+mixin experience(exp)
+  div
+    h3 #{exp.company}
+    div.evenly_spaced
+      div
+        each position in exp.positions.length ? exp.positions : ''
+          h4 #{position.title}
+      div
+          each position in exp.positions.length ? exp.positions : ''
+            h4
+              em #{position.startDate} - #{position.endDate}
+  ul
+    each bullet in exp.bullets.length ? exp.bullets : ''
+      li !{bullet}
+
+if experiences
+  section#experiences
+    h2 Work Experience
+    +line
+
+    each exp in experiences
+      +experience(exp)

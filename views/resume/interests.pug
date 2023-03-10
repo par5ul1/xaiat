@@ -1,0 +1,17 @@
+//-
+  @Author: Parsa Rahimi <par5ul1>
+  @Date:   2022-06-30T13:46:12-07:00
+  @Filename: projects.pug
+  @Last modified by:   par5ul1
+  @Last modified time: 2022-06-30T15:28:54-07:00
+  
+if interests
+  section#interests
+    h2 Interests
+    +line
+
+    p
+      each interest, i in interests
+        span #{interest}
+        if i < interest.length
+          +textSeparator
