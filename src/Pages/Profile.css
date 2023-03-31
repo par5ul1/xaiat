@@ -1,0 +1,58 @@
+#header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  text-align: center;
+  width: 100vw;
+}
+
+#header>h4 {
+  margin-top: 0;
+}
+
+#contact {
+  flex-direction: column;
+}
+
+#contact > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#links {
+  flex-direction: column;
+}
+
+#education {
+  flex-direction: column;
+}
+
+#experience {
+  flex-direction: column;
+}
+
+#projects {
+  flex-direction: column;
+}
+
+#skills {
+  flex-direction: column;
+}
+
+#interests {
+  flex-direction: column;
+}
+
+#terminal-btns {
+  margin-block: 5vmin;
+  width: fit-content;
+  gap: 2vmin;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80vw;
+  gap: 2vmin 0;
+}

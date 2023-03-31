@@ -1,0 +1,10 @@
+.header {
+  display: inline-flex;
+  gap: 2vmin;
+  align-items: baseline;
+  margin-block: 1vmin;
+}
+
+.header h6, .header h2 {
+  margin: 0;
+}

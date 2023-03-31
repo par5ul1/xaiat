@@ -1,0 +1,16 @@
+.micro-card {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.micro-card>button {
+  background: transparent;
+  border: none;
+  margin-left: 10px;
+  text-align: center;
+}

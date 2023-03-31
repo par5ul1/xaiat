@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+:root {
+  /* Font Sizes */
+  --giant-sz: 5vmin;
+  --large-sz: 2.5vmin;
+  --normal-sz: 2vmin;
+  --small-sz: 1.5vmin;
+  --tiny-sz: 1.25vmin;
+
+  /* Font Weights */
+  --extra-bold-wt: 800;
+  --semi-bold-wt: 600;
+  --regular-wt: 400;
+  --light-wt: 300;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Font Colors */
+    --font-primary: #ffffff;
+    --font-secondary: #bdbdbd;
+
+    /* Color Palette */
+    --primary: #161616;
+    --secondary: #3e3e42;
+    --accent: #555555;
+    --positive: #689e51;
+    --negative: #b95656;
+
+    /* Shadow */
+    --shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.25);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Font Colors */
+    --font-primary: #000000;
+    --font-secondary: #939393;
+
+    /* Color Palette */
+    --primary: #ffffff;
+    --secondary: #f3f3f3;
+    --accent: #ffffff;
+    --positive: #87ce68;
+    --negative: #ce6868;
+
+    /* Shadow */
+    --shadow: 0px 2px 40px 0px rgba(0, 0, 0, 0.1);
+  }
+}
+
+* {
+  text-overflow: ellipsis;
+  font-family: "Open Sans";
+  font-weight: var(--regular-wt);
+  font-size: var(--normal-sz);
+}
+
+body {
+  margin: 0;
+  background: var(--primary);
+}
+
+h1 {
+  font-weight: var(--extra-bold-wt);
+  font-size: var(--giant-sz);
+}
+
+h2 {
+  font-weight: var(--semi-bold-wt);
+  font-size: var(--large-sz);
+}
+
+h3 {
+  font-weight: var(--regular-wt);
+  font-size: var(--normal-sz);
+}
+
+h4 {
+  font-weight: var(--light-wt);
+  font-size: var(--normal-sz);
+  color: var(--font-secondary)
+}
+
+h5 {
+  font-weight: var(--light-wt);
+  font-size: var(--small-sz);
+  color: var(--font-secondary)
+}
+
+h6 {
+  font-weight: var(--light-wt);
+  font-size: var(--tiny-sz);
+  color: var(--font-secondary)
+}
+
+input {
+  border: none;
+  background: var(--secondary);
+  color: var(--font-primary);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+input:focus,
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.08em var(--font-primary);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+input::placeholder {
+  color: var(--font-secondary);
+}
+
+button {
+  color: var(--font-primary);
+  border-radius: 10px;
+}
+
+button,
+a {
+  transition: 0.05s ease-in-out;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button:active,
+a:active {
+  box-shadow: none;
+}
+
+#root {
+  color: var(--font-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2vmin;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.save-btn {
+  width: 10vmin;
+  border: none;
+  border-radius: 200px;
+  padding: 10px;
+  background: var(--positive);
+  box-shadow: var(--shadow);
+}
+
+.delete-btn {
+  width: 10vmin;
+  border: none;
+  border-radius: 200px;
+  padding: 10px;
+  background: var(--negative);
+  box-shadow: var(--shadow);
+}
+
+.cancel-btn {
+  width: 10vmin;
+  border: 2px solid;
+  border-radius: 200px;
+  padding: 10px;
+  background: transparent;
+}
+
+.add-btn {
+  width: 10vmin;
+  border: none;
+  padding: 10px;
+  background: var(--accent);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+.edit-btn {
+  border: none;
+  background: transparent;
+}
+
+.new-card-btn {
+  width: 5vmin;
+  height: 5vmin;
+  border: none;
+  border-radius: 100%;
+  background: var(--accent);
+  align-self: center;
+  box-shadow: var(--shadow);
+}
+
+.mini-btn {
+  width: 2.5vmin;
+  height: 2.5vmin;
+  border: none;
+  background: var(--accent);
+  box-shadow: var(--shadow);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mini-btn i {
+  font-size: 1vmin;
+}
+
+.same-line {
+  display: inline-flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 2vmin;
+}

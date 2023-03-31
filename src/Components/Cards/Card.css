@@ -1,0 +1,14 @@
+.card {
+  display: inline-flex;
+  padding: 20px;
+  height: 10vmin;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+  border-radius: 40px;
+  background: var(--accent);
+}
+
+.card>div>* {
+  margin: 0;
+}
