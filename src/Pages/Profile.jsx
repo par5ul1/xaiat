@@ -14,6 +14,13 @@ import { useState } from "react";
 
 const Profile = () => {
   // States
+  const [contacts, setContacts] = useState({
+    name: "Parsa Rahimi",
+    email: "mail@parsuli.net",
+    telephone: "(415) 231-9108",
+    address: "San Francisco, CA"
+  });
+
   const [links, setLinks] = useState([
     "https://parsuli.net",
     "https://www.linkedin.com/in/parsa-rahimi/",
@@ -77,7 +84,35 @@ const Profile = () => {
     }
   ]);
 
-  const [experiences, setExperiences] = useState([]);
+  const [experiences, setExperiences] = useState([
+    {
+      company: "University of San Francisco",
+      titles: [
+        {
+          title: "Teaching Assistant (Software Development)",
+          startDate: "January 2022",
+          endDate: "Present"
+        },
+        {
+          title:
+            "Teaching Assistant (Introduction to Computer Science I - Python Foundation)",
+          startDate: "August 2020",
+          endDate: "December 2021"
+        },
+        {
+          title:
+            "Teaching Assistant (Introduction to Computer Science II - Java Foundation)",
+          startDate: "January 2021",
+          endDate: "May 2021"
+        }
+      ],
+      descriptions: [
+        "Hold office hours assisting students with debugging code and digesting material. Answer questions on Piazza.",
+        "Grade around 30 weekly homework assignments and leave specific feedback on each one.",
+        "Conduct code reviews and help students improve their code quality for better readability and documentation."
+      ]
+    }
+  ]);
 
   const [projects, setProjects] = useState([
     {
@@ -124,6 +159,12 @@ const Profile = () => {
   ]);
 
   // Handlers
+  const updateContacts = (key, value) => {
+    setContacts({
+      ...contacts,
+      [key]: value
+    });
+  };
 
   const addLink = (link) => {
     setLinks([...links, link]);
@@ -135,6 +176,12 @@ const Profile = () => {
 
   const addEducation = (education) => {
     setEducations([...educations, education]);
+  };
+
+  const updateEducation = (index, data) => {
+    const newEducation = [...educations];
+    newEducation[index] = data;
+    setEducations(newEducation);
   };
 
   const removeEducation = (index) => {
@@ -175,7 +222,7 @@ const Profile = () => {
 
   const getProfileJSON = () => {
     return JSON.stringify({
-      // Contact
+      contacts,
       links,
       educations,
       experiences,
@@ -199,15 +246,27 @@ const Profile = () => {
           Contact
         </Header>
         <div>
-          <TextInput label='Full Name'></TextInput>
-          <TextInput label='Email'></TextInput>
+          <TextInput
+            label='Full Name'
+            inputValue={contacts.name}
+            updateInputValue={(val) => updateContacts("name", val)}
+          ></TextInput>
+          <TextInput
+            label='Email'
+            inputValue={contacts.email}
+            updateInputValue={(val) => updateContacts("email", val)}
+          ></TextInput>
           <TextInput
             label='Telephone'
             placeholder='e.g. (888) 888-8888'
+            inputValue={contacts.telephone}
+            updateInputValue={(val) => updateContacts("telephone", val)}
           ></TextInput>
           <TextInput
             label='Address'
             placeholder='e.g. San Francisco, CA'
+            inputValue={contacts.address}
+            updateInputValue={(val) => updateContacts("address", val)}
           ></TextInput>
         </div>
       </div>
@@ -242,11 +301,16 @@ const Profile = () => {
               primary={education.institution}
               tertiary={education.startDate + " - " + education.endDate}
               data={education}
-              modal={<EducationModal onDelete={() => removeEducation(index)} />}
+              modal={
+                <EducationModal
+                  onSave={(newData) => updateEducation(index, newData)}
+                  onDelete={() => removeEducation(index)}
+                />
+              }
             ></Card>
           ))}
           <CardAdder>
-            <EducationModal />
+            <EducationModal onSave={addEducation} />
           </CardAdder>
         </CardList>
       </div>
@@ -258,16 +322,17 @@ const Profile = () => {
           {experiences.map((experience, index) => (
             <Card
               key={"experience" + index}
-              primary={experience.positions[0].title}
+              primary={experience.titles[0].title}
               secondary={experience.company}
               tertiary={
-                experience.positions[0].startDate +
+                experience.titles[0].startDate +
                 " - " +
-                experience.positions[0].endDate
+                experience.titles[0].endDate
               }
+              data={experience}
               modal={
                 <ExperienceModal onDelete={() => removeExperience(index)} />
-              } // TODO: Test
+              }
             ></Card>
           ))}
           <CardAdder>

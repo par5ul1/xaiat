@@ -8,25 +8,30 @@ import ModalFooter from "./Components/ModalFooter";
 import TextInput from "../General/TextInput";
 import { useState } from "react";
 
-const EducationModal = ({ isOpen, toggleModal, data, onDelete }) => {
-  const [awards, setAwards] = useState(data ? data.awards : []);
+const EducationModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
+  const [tempData, setTempData] = useState({
+    institution: data ? data.institution : "",
+    startDate: data ? data.startDate : "",
+    endDate: data ? data.endDate : "",
+    degree: data ? data.degree : "",
+    awards: data ? data.awards : [],
+    courses: data ? data.courses : []
+  });
 
-  const [courses, setCourses] = useState(data ? data.courses : []);
-
-  const addAward = (award) => {
-    setAwards([...awards, award]);
+  const updateTempData = (key, value) => {
+    setTempData({
+      ...tempData,
+      [key]: value
+    });
   };
 
-  const removeAward = (index) => {
-    setAwards(awards.filter((_, i) => i !== index));
-  };
-
-  const addCourse = (course) => {
-    setCourses([...courses, course]);
-  };
-
-  const removeCourse = (index) => {
-    setCourses(courses.filter((_, i) => i !== index));
+  const removeFromArrayInTempData = (key, index) => {
+    let value = [...tempData[key]];
+    value.splice(index, 1);
+    setTempData({
+      ...tempData,
+      [key]: value
+    });
   };
 
   return (
@@ -42,59 +47,67 @@ const EducationModal = ({ isOpen, toggleModal, data, onDelete }) => {
               <TextInput
                 label='Institution'
                 placeholder='e.g. Monsters University'
-                inputValue={data ? data.institution : ""}
+                inputValue={tempData.institution}
+                updateInputValue={(val) => updateTempData("institution", val)}
               ></TextInput>
               <TextInput
                 label='Start Date'
                 width='15vw'
-                inputValue={data ? data.startDate : ""}
+                inputValue={tempData.startDate}
+                updateInputValue={(val) => updateTempData("startDate", val)}
               ></TextInput>
               <TextInput
                 label='End Date'
                 width='15vw'
-                inputValue={data ? data.endDate : ""}
+                inputValue={tempData.endDate}
+                updateInputValue={(val) => updateTempData("endDate", val)}
               ></TextInput>
             </div>
 
             <TextInput
               label='Degree'
               placeholder='e.g. B.S. in Canister Design'
-              inputValue={data ? data.degree : ""}
+              inputValue={tempData.degree}
+              updateInputValue={(val) => updateTempData("degree", val)}
             ></TextInput>
 
             <Header large={false}>Awards</Header>
-            {!awards.length == 0 && (
+            {!tempData.awards.length == 0 && (
               <CardList fullWidth={false}>
-                {awards.map((award, index) => (
+                {tempData.awards.map((award, index) => (
                   <MicroCard
                     key={"awards" + index}
                     value={award}
                     width='auto'
-                    onDelete={() => removeAward(index)}
+                    onDelete={() => removeFromArrayInTempData("awards", index)}
                   ></MicroCard>
                 ))}
               </CardList>
             )}
             <AddableTextInput
-              onAdd={addAward}
+              onAdd={(val) =>
+                updateTempData("awards", [...tempData.awards, val])
+              }
               placeholder='Enter an award (e.g. Top Scarer, GPA)'
             ></AddableTextInput>
 
             <Header large={false}>Relevant Coursework</Header>
-            {!courses.length == 0 && (
+            {!tempData.courses.length == 0 && (
               <CardList fullWidth={false}>
-                {courses.map((course, index) => (
+                {tempData.courses.map((course, index) => (
                   <MicroCard
                     key={"courses" + index}
                     value={course}
                     width='auto'
-                    onDelete={() => removeCourse(index)}
+                    onDelete={() => removeFromArrayInTempData("courses", index)}
                   ></MicroCard>
                 ))}
               </CardList>
             )}
             <AddableTextInput
-              onAdd={addCourse}
+              onAdd={(val) =>
+                updateTempData("courses", [...tempData.courses, val])
+              }
               placeholder='Enter a course (e.g. Scaring 101)'
             ></AddableTextInput>
           </div>
@@ -102,7 +115,9 @@ const EducationModal = ({ isOpen, toggleModal, data, onDelete }) => {
           <ModalFooter
             toggleModal={toggleModal}
             onDelete={onDelete}
-            data={data}
+            onSave={onSave}
+            data={tempData}
+            isNew={!data}
           ></ModalFooter>
         </div>
       </div>
