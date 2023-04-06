@@ -1,8 +1,11 @@
-const ModalFooter = ({ data, toggleModal, onDelete, onSave, isNew }) => {
-  const hasData =
-    data &&
-    Object.values(data).reduce((prev, curr) => prev || curr.length > 0, false);
-
+const ModalFooter = ({
+  data,
+  toggleModal,
+  onDelete,
+  canSave,
+  onSave,
+  isNew
+}) => {
   return (
     <div className='modal-footer'>
       <button className='cancel-btn' onClick={toggleModal}>
@@ -25,7 +28,7 @@ const ModalFooter = ({ data, toggleModal, onDelete, onSave, isNew }) => {
           toggleModal();
           onSave(data);
         }}
-        disabled={!hasData}
+        disabled={!canSave}
       >
         Save
       </button>

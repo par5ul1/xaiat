@@ -192,12 +192,24 @@ const Profile = () => {
     setExperiences([...experiences, experience]);
   };
 
+  const updateExperience = (index, data) => {
+    const newExperience = [...experiences];
+    newExperience[index] = data;
+    setExperiences(newExperience);
+  };
+
   const removeExperience = (index) => {
     setExperiences(experiences.filter((_, i) => i !== index));
   };
 
   const addProject = (project) => {
     setProjects([...projects, project]);
+  };
+
+  const updateProjects = (index, data) => {
+    const newProjects = [...projects];
+    newProjects[index] = data;
+    setProjects(newProjects);
   };
 
   const removeProject = (index) => {
@@ -318,11 +330,15 @@ const Profile = () => {
       <div id='experience' className='container'>
         <Header>Experience</Header>
         <CardList>
-          {/* TODO: Add multijob support in preview */}
           {experiences.map((experience, index) => (
             <Card
               key={"experience" + index}
-              primary={experience.titles[0].title}
+              primary={
+                experience.titles[0].title +
+                (experience.titles.length > 1
+                  ? " + " + (experience.titles.length - 1) + " more"
+                  : "")
+              }
               secondary={experience.company}
               tertiary={
                 experience.titles[0].startDate +
@@ -331,12 +347,15 @@ const Profile = () => {
               }
               data={experience}
               modal={
-                <ExperienceModal onDelete={() => removeExperience(index)} />
+                <ExperienceModal
+                  onSave={(newData) => updateExperience(index, newData)}
+                  onDelete={() => removeExperience(index)}
+                />
               }
             ></Card>
           ))}
           <CardAdder>
-            <ExperienceModal />
+            <ExperienceModal onSave={addExperience} />
           </CardAdder>
         </CardList>
       </div>

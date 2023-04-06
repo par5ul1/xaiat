@@ -8,24 +8,27 @@ import ModalFooter from "./Components/ModalFooter";
 import TextInput from "../General/TextInput";
 import { useState } from "react";
 
-const ExperienceModal = ({ isOpen, toggleModal, data, onDelete }) => {
-  const [descriptions, setDescriptions] = useState([]);
-  const [numTitles, setNumTitles] = useState(1);
+const ExperienceModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
+  const [tempData, setTempData] = useState({
+    company: data ? data.company : "",
+    titles: data ? data.titles : [{ title: "", startDate: "", endDate: "" }],
+    descriptions: data ? data.descriptions : []
+  });
 
-  const addDescription = (description) => {
-    setDescriptions([...descriptions, description]);
+  const updateTempData = (key, value) => {
+    setTempData({
+      ...tempData,
+      [key]: value
+    });
   };
 
-  const removeDescription = (index) => {
-    setDescriptions(descriptions.filter((_, i) => i !== index));
-  };
-
-  const incrementNumTitles = () => {
-    setNumTitles((n) => ++n);
-  };
-
-  const decrementNumTitles = () => {
-    if (numTitles > 1) setNumTitles((n) => --n);
+  const removeFromArrayInTempData = (key, index) => {
+    let value = [...tempData[key]];
+    value.splice(index, 1);
+    setTempData({
+      ...tempData,
+      [key]: value
+    });
   };
 
   return (
@@ -37,58 +40,90 @@ const ExperienceModal = ({ isOpen, toggleModal, data, onDelete }) => {
           </div>
 
           <div className='modal-content'>
-            <TextInput label='Company' placeholder="e.g. Gusteau's"></TextInput>
+            {/* FIXME: Text input is buggy */}
+            <TextInput
+              label='Company'
+              placeholder="e.g. Gusteau's"
+              inputValue={tempData.company}
+              updateInputValue={(val) => updateTempData("company", val)}
+            ></TextInput>
 
-            {Array(numTitles)
-              .fill(0)
-              .map((_, index) => {
-                return (
-                  <div className='same-line' key={"title" + index}>
-                    <TextInput
-                      label={index === 0 ? "Title(s)" : ""}
-                      placeholder='e.g. Head Chef'
-                      hint='you can add multiple titles if they share the same description.'
-                    ></TextInput>
-                    <TextInput
-                      label={index === 0 ? "Start Date" : ""}
-                      width='12.5vw'
-                    ></TextInput>
-                    <TextInput
-                      label={index === 0 ? "End Date" : ""}
-                      width='12.5vw'
-                    ></TextInput>
+            {tempData.titles.map((title, index) => {
+              return (
+                <div className='same-line' key={"title" + index}>
+                  <TextInput
+                    label={index === 0 ? "Title(s)" : ""}
+                    placeholder='e.g. Head Chef'
+                    hint='you can add multiple titles if they share the same description.'
+                    inputValue={title.title}
+                    updateInputValue={(val) => {
+                      let updatedTitle = [...tempData.titles];
+                      updatedTitle[index].title = val;
+                      updateTempData("titles", updatedTitle);
+                    }}
+                  ></TextInput>
+                  <TextInput
+                    label={index === 0 ? "Start Date" : ""}
+                    width='12.5vw'
+                    inputValue={title.startDate}
+                    updateInputValue={(val) => {
+                      let updatedTitle = [...tempData.titles];
+                      updatedTitle[index].startDate = val;
+                      updateTempData("titles", updatedTitle);
+                    }}
+                  ></TextInput>
+                  <TextInput
+                    label={index === 0 ? "End Date" : ""}
+                    width='12.5vw'
+                    inputValue={title.endDate}
+                    updateInputValue={(val) => {
+                      let updatedTitle = [...tempData.titles];
+                      updatedTitle[index].endDate = val;
+                      updateTempData("titles", updatedTitle);
+                    }}
+                  ></TextInput>
+                  <button
+                    className='mini-btn'
+                    onClick={() =>
+                      updateTempData("titles", [
+                        ...tempData.titles,
+                        { title: "", startDate: "", endDate: "" }
+                      ])
+                    }
+                  >
+                    <i className='fa-solid fa-plus'></i>
+                  </button>
+                  {tempData.titles.length > 1 && (
                     <button
                       className='mini-btn'
-                      onmouseup='this.style.outline=null;'
-                      onClick={incrementNumTitles}
+                      onClick={() => removeFromArrayInTempData("titles", index)}
                     >
-                      <i className='fa-solid fa-plus'></i>
+                      <i className='fa-solid fa-minus'></i>
                     </button>
-                    {/* FIXME: Broken. Fix when you have state for all inputs */}
-                    {numTitles > 1 && (
-                      <button className='mini-btn' onClick={decrementNumTitles}>
-                        <i className='fa-solid fa-minus'></i>
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
+                  )}
+                </div>
+              );
+            })}
 
             <Header large={false}>Descriptions</Header>
-            {!descriptions.length == 0 && (
+            {!tempData.descriptions.length == 0 && (
               <CardList fullWidth={false}>
-                {descriptions.map((description, index) => (
+                {tempData.descriptions.map((description, index) => (
                   <MicroCard
                     key={"descriptions" + index}
                     value={description}
                     width='auto'
-                    onDelete={() => removeDescription(index)}
+                    onDelete={() =>
+                      removeFromArrayInTempData("descriptions", index)
+                    }
                   ></MicroCard>
                 ))}
               </CardList>
             )}
             <AddableTextInput
-              onAdd={addDescription}
+              onAdd={(val) =>
+                updateTempData("descriptions", [...tempData.descriptions, val])
+              }
               placeholder='Enter bullet points'
             ></AddableTextInput>
           </div>
@@ -96,7 +131,15 @@ const ExperienceModal = ({ isOpen, toggleModal, data, onDelete }) => {
           <ModalFooter
             toggleModal={toggleModal}
             onDelete={onDelete}
-            data={data}
+            onSave={onSave}
+            canSave={
+              tempData.company.length > 0 &&
+              tempData.titles[0].title.length > 0 &&
+              tempData.titles[0].startDate.length > 0 &&
+              tempData.titles[0].endDate.length > 0
+            }
+            data={tempData}
+            isNew={!data}
           ></ModalFooter>
         </div>
       </div>
