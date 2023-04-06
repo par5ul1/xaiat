@@ -116,6 +116,11 @@ const EducationModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
             toggleModal={toggleModal}
             onDelete={onDelete}
             onSave={onSave}
+            canSave={
+              tempData.institution.length > 0 &&
+              tempData.startDate.length > 0 &&
+              tempData.endDate.length > 0
+            }
             data={tempData}
             isNew={!data}
           ></ModalFooter>
