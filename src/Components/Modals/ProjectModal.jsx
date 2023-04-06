@@ -8,27 +8,29 @@ import ModalFooter from "./Components/ModalFooter";
 import TextInput from "../General/TextInput";
 import { useState } from "react";
 
-const ProjectModal = ({ isOpen, toggleModal, data, onDelete }) => {
-  const [descriptions, setDescriptions] = useState(
-    data ? data.descriptions : []
-  );
+const ProjectModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
+  const [tempData, setTempData] = useState({
+    name: data ? data.name : "",
+    shortDescription: data ? data.shortDescription : "",
+    date: data ? data.date : "",
+    descriptions: data ? data.descriptions : [],
+    used: data ? data.used : []
+  });
 
-  const [skills, setSkills] = useState(data ? data.used : []);
-
-  const addDescription = (description) => {
-    setDescriptions([...descriptions, description]);
+  const updateTempData = (key, value) => {
+    setTempData({
+      ...tempData,
+      [key]: value
+    });
   };
 
-  const removeDescription = (index) => {
-    setDescriptions(descriptions.filter((_, i) => i !== index));
-  };
-
-  const addSkill = (skill) => {
-    setSkills([...skills, skill]);
-  };
-
-  const removeSkill = (index) => {
-    setSkills(skills.filter((_, i) => i !== index));
+  const removeFromArrayInTempData = (key, index) => {
+    let value = [...tempData[key]];
+    value.splice(index, 1);
+    setTempData({
+      ...tempData,
+      [key]: value
+    });
   };
 
   return (
@@ -43,7 +45,8 @@ const ProjectModal = ({ isOpen, toggleModal, data, onDelete }) => {
               <TextInput
                 label='Name'
                 placeholder='e.g. Custom Vespa'
-                inputValue={data ? data.name : ""}
+                inputValue={tempData.name}
+                updateInputValue={(val) => updateTempData("name", val)}
               ></TextInput>
             </div>
 
@@ -51,52 +54,65 @@ const ProjectModal = ({ isOpen, toggleModal, data, onDelete }) => {
               <TextInput
                 label='Short Description'
                 placeholder='e.g. Built a Vespa from scratch'
-                inputValue={data ? data.shortDescription : ""}
+                inputValue={tempData.shortDescription}
+                updateInputValue={(val) =>
+                  updateTempData("shortDescription", val)
+                }
               ></TextInput>
               <TextInput
                 label='Date'
                 width='25vw'
-                inputValue={data ? data.date : ""}
+                inputValue={tempData.date}
+                updateInputValue={(val) => updateTempData("date", val)}
               ></TextInput>
             </div>
 
             <Header large={false}>Descriptions</Header>
-            {!descriptions.length == 0 && (
+            {!tempData.descriptions.length == 0 && (
               <CardList fullWidth={false}>
-                {descriptions.map((description, index) => (
+                {tempData.descriptions.map((description, index) => (
                   <MicroCard
                     key={"descriptions" + index}
                     value={description}
                     width='auto'
-                    onDelete={() => removeDescription(index)}
+                    onDelete={() =>
+                      removeFromArrayInTempData("descriptions", index)
+                    }
                   ></MicroCard>
                 ))}
               </CardList>
             )}
             <AddableTextInput
-              onAdd={addDescription}
+              onAdd={(val) =>
+                updateTempData("descriptions", [...tempData.descriptions, val])
+              }
               placeholder='Enter bullet points'
             ></AddableTextInput>
 
             <Header large={false}>Skills Used</Header>
-            {!skills.length == 0 && (
+            {!tempData.used.length == 0 && (
               <CardList fullWidth={false}>
-                {skills.map((skill, index) => (
+                {tempData.used.map((skill, index) => (
                   <MicroCard
                     key={"skills" + index}
                     value={skill}
                     width='auto'
-                    onDelete={() => removeSkill(index)}
+                    onDelete={() => removeFromArrayInTempData("used", index)}
                   ></MicroCard>
                 ))}
               </CardList>
             )}
-            <AddableTextInput onAdd={addSkill}></AddableTextInput>
+            <AddableTextInput
+              onAdd={(val) => updateTempData("used", [...tempData.used, val])}
+            ></AddableTextInput>
           </div>
           <ModalFooter
             toggleModal={toggleModal}
             onDelete={onDelete}
-            data={data}
+            onSave={onSave}
+            canSave={tempData.name.length > 0 && tempData.date.length > 0}
+            data={tempData}
+            isNew={!data}
           ></ModalFooter>
         </div>
       </div>

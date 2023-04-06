@@ -369,11 +369,16 @@ const Profile = () => {
               primary={project.name}
               tertiary={project.date}
               data={project}
-              modal={<ProjectModal onDelete={() => removeProject(index)} />}
+              modal={
+                <ProjectModal
+                  onSave={(newData) => updateProjects(index, newData)}
+                  onDelete={() => removeProject(index)}
+                />
+              }
             ></Card>
           ))}
           <CardAdder>
-            <ProjectModal />
+            <ProjectModal onSave={addProject} />
           </CardAdder>
         </CardList>
       </div>
