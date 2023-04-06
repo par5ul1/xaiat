@@ -8,15 +8,20 @@ const ModalFooter = ({
 }) => {
   return (
     <div className='modal-footer'>
-      <button className='cancel-btn' onClick={toggleModal}>
+      <button
+        className='cancel-btn'
+        onClick={() => confirm("Confirm Cancel") && toggleModal()}
+      >
         Cancel
       </button>
       {!isNew && (
         <button
           className='delete-btn'
           onClick={() => {
-            toggleModal();
-            onDelete();
+            if (confirm("Confirm Delete")) {
+              toggleModal();
+              onDelete();
+            }
           }}
         >
           Delete

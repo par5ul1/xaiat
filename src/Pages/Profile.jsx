@@ -1,5 +1,7 @@
 import "./Profile.css";
 
+import { Link, useNavigate } from "react-router-dom";
+
 import Card from "../Components/Cards/Card";
 import CardAdder from "../Components/Cards/Adders/CardAdder";
 import CardList from "../Components/Lists/CardList";
@@ -13,6 +15,7 @@ import TextInput from "../Components/General/TextInput";
 import { useState } from "react";
 
 const Profile = () => {
+  const navigate = useNavigate();
   // States
   const [contacts, setContacts] = useState({
     name: "Parsa Rahimi",
@@ -428,7 +431,12 @@ const Profile = () => {
       </div>
 
       <div className='container' id='terminal-btns'>
-        <button className='cancel-btn'>Cancel</button>
+        <button
+          className='cancel-btn'
+          onClick={() => confirm("Confirm Cancel") && navigate("/")}
+        >
+          Cancel
+        </button>
         <button
           className='save-btn'
           onClick={() => console.log(getProfileJSON())}

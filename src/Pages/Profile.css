@@ -6,7 +6,7 @@
   width: 100vw;
 }
 
-#header>h4 {
+#header > h4 {
   margin-top: 0;
 }
 
@@ -48,11 +48,4 @@
   margin-block: 5vmin;
   width: fit-content;
   gap: 2vmin;
-}
-
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  width: 80vw;
-  gap: 2vmin 0;
 }

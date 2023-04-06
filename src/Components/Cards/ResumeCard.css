@@ -1,0 +1,10 @@
+.resume-card {
+  display: flex;
+  width: 12vmin;
+  height: 16vmin;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  background: var(--accent);
+  box-shadow: var(--shadow);
+}

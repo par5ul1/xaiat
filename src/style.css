@@ -126,6 +126,10 @@ a {
   transition: 0.05s ease-in-out;
 }
 
+a {
+  color: var(--font-primary);
+}
+
 button:hover {
   cursor: pointer;
 }
@@ -217,9 +221,31 @@ a:active {
   font-size: 1vmin;
 }
 
+.profile-btn {
+  position: absolute;
+  top: 5vmin;
+  left: 5vmin;
+  display: flex;
+  width: 5vmin;
+  height: 5vmin;
+  border: none;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  background: var(--accent);
+  box-shadow: var(--shadow);
+}
+
 .same-line {
   display: inline-flex;
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 2vmin;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80vw;
+  gap: 2vmin 0;
 }
