@@ -13,6 +13,7 @@ import MicroCard from "../Components/Cards/MicroCard";
 import MicroCardAdder from "../Components/Cards/Adders/MicroCardAdder";
 import ProjectModal from "../Components/Modals/ProjectModal";
 import TextInput from "../Components/General/TextInput";
+import localforage from "localforage";
 
 const Profile = () => {
   const profilePath = "/jsons/profile.json";
@@ -49,20 +50,32 @@ const Profile = () => {
     });
   };
 
-  useEffect(() => {
-    fetch(profilePath)
-      .then((response) => response.json())
-      .then((data) => {
-        setProfile(data);
-      })
-      .catch((error) => {
-        console.warn("Could not find a profile. Assigning empty one.");
-      });
-  }, []);
-
-  const getProfileJSON = () => {
-    return JSON.stringify(profile);
+  const saveProfile = async (profile) => {
+    try {
+      await localforage.setItem("profile", profile);
+      console.log("Profile saved to local storage.");
+    } catch (err) {
+      console.error("Error saving profile to local storage:", err);
+    }
   };
+
+  const loadProfile = async () => {
+    try {
+      const profile = await localforage.getItem("profile");
+      if (profile) {
+        setProfile(profile);
+        console.log("Profile loaded from local storage.");
+      } else {
+        console.warn("No profile found in local storage.");
+      }
+    } catch (err) {
+      console.error("Error loading profile from local storage:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
 
   return (
     <>
@@ -290,10 +303,7 @@ const Profile = () => {
         >
           Cancel
         </button>
-        <button
-          className='save-btn'
-          onClick={() => console.log(getProfileJSON())}
-        >
+        <button className='save-btn' onClick={() => saveProfile(profile)}>
           Save
         </button>
       </div>
