@@ -3,12 +3,17 @@
   width: 12vmin;
   height: 16vmin;
   border-radius: 10px;
+  padding: 1vmin;
   justify-content: center;
   align-items: center;
   background: var(--accent);
   box-shadow: var(--shadow);
+  cursor: pointer;
 }
 
 .resume-card > h3 {
   user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

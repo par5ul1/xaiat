@@ -50,10 +50,9 @@ const Profile = () => {
     });
   };
 
-  const saveProfile = async (profile) => {
+  const saveProfile = async () => {
     try {
       await localforage.setItem("profile", profile);
-      console.log("Profile saved to local storage.");
     } catch (err) {
       console.error("Error saving profile to local storage:", err);
     }
@@ -64,7 +63,6 @@ const Profile = () => {
       const profile = await localforage.getItem("profile");
       if (profile) {
         setProfile(profile);
-        console.log("Profile loaded from local storage.");
       } else {
         console.warn("No profile found in local storage.");
       }
@@ -303,7 +301,13 @@ const Profile = () => {
         >
           Cancel
         </button>
-        <button className='save-btn' onClick={() => saveProfile(profile)}>
+        <button
+          className='save-btn'
+          onClick={() => {
+            saveProfile();
+            navigate("/");
+          }}
+        >
           Save
         </button>
       </div>

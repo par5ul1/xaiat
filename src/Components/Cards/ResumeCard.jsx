@@ -2,9 +2,9 @@ import "./ResumeCard.css";
 
 import React from "react";
 
-const ResumeCard = ({ title }) => {
+const ResumeCard = ({ title, onClick }) => {
   return (
-    <div className='resume-card'>
+    <div className='resume-card' onClick={onClick}>
       <h3>{title}</h3>
     </div>
   );
