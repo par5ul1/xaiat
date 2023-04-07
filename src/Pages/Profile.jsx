@@ -1,6 +1,7 @@
 import "./Profile.css";
 
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import Card from "../Components/Cards/Card";
 import CardAdder from "../Components/Cards/Adders/CardAdder";
@@ -12,11 +13,30 @@ import MicroCard from "../Components/Cards/MicroCard";
 import MicroCardAdder from "../Components/Cards/Adders/MicroCardAdder";
 import ProjectModal from "../Components/Modals/ProjectModal";
 import TextInput from "../Components/General/TextInput";
-import { useState } from "react";
 
 const Profile = () => {
   const navigate = useNavigate();
   // States
+  // fetch("profile.json", {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Accept: "application/json"
+  //   }
+  // }).then((val) => console.log(val.json()));
+
+  const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    fetch("profile.json")
+      .then((response) => response.json())
+      .then((data) => {
+        setProfile(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   const [contacts, setContacts] = useState({
     name: "Parsa Rahimi",
     email: "mail@parsuli.net",

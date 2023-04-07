@@ -8,3 +8,7 @@
   background: var(--accent);
   box-shadow: var(--shadow);
 }
+
+.resume-card > h3 {
+  user-select: none;
+}
