@@ -28,6 +28,8 @@ const TextInput = ({
         type='text'
         placeholder={placeholder}
         value={inputValue}
+        data-lpignore
+        autoComplete='false'
       />
     </label>
   );

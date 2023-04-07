@@ -10,7 +10,14 @@ const ModalFooter = ({
     <div className='modal-footer'>
       <button
         className='cancel-btn'
-        onClick={() => confirm("Confirm Cancel") && toggleModal()}
+        onClick={() => {
+          if (confirm("Confirm Cancel")) {
+            console.warn(
+              'If you\'re getting an "Uncaught TypeError: Cannot read properties of undefined..." error, the culprit is likely your autofill manager such as LastPass.'
+            );
+            toggleModal();
+          }
+        }}
       >
         Cancel
       </button>
@@ -19,6 +26,9 @@ const ModalFooter = ({
           className='delete-btn'
           onClick={() => {
             if (confirm("Confirm Delete")) {
+              console.warn(
+                'If you\'re getting an "Uncaught TypeError: Cannot read properties of undefined..." error, the culprit is likely your autofill manager such as LastPass.'
+              );
               toggleModal();
               onDelete();
             }
@@ -30,6 +40,9 @@ const ModalFooter = ({
       <button
         className='save-btn'
         onClick={() => {
+          console.warn(
+            'If you\'re getting an "Uncaught TypeError: Cannot read properties of undefined..." error, the culprit is likely your autofill manager such as LastPass.'
+          );
           toggleModal();
           onSave(data);
         }}

@@ -15,6 +15,7 @@ import ProjectModal from "../Components/Modals/ProjectModal";
 import TextInput from "../Components/General/TextInput";
 
 const Profile = () => {
+  const profilePath = "/jsons/profile.json";
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState({
@@ -49,7 +50,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    fetch("profile.json")
+    fetch(profilePath)
       .then((response) => response.json())
       .then((data) => {
         setProfile(data);

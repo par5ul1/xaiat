@@ -40,7 +40,6 @@ const ExperienceModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
           </div>
 
           <div className='modal-content'>
-            {/* FIXME: Text input is buggy */}
             <TextInput
               label='Company'
               placeholder="e.g. Gusteau's"
