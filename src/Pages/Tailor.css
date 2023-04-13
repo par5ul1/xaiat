@@ -1,0 +1,51 @@
+#tailor {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+#sidebar {
+  background: var(--accent);
+  height: 90vh;
+  overflow-y: scroll;
+  margin: 2.5vmin 0 2.5vmin 2.5vmin;
+  box-sizing: border-box;
+  padding: 2vmin;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2vmin;
+  overflow: overlay;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+#sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+#sidebar label {
+  align-self: center;
+  text-align: center;
+}
+
+#sidebar .card,
+#sidebar .micro-card {
+  user-select: none;
+  cursor: pointer;
+}
+
+#resume-container {
+  min-width: 8.5in;
+  height: 11in;
+  overflow-y: scroll;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+.active > * {
+  background: var(--positive);
+}

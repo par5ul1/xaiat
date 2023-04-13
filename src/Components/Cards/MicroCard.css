@@ -8,7 +8,7 @@
   box-shadow: var(--shadow);
 }
 
-.micro-card>button {
+.micro-card > button {
   background: transparent;
   border: none;
   margin-left: 10px;

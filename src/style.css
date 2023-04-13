@@ -119,6 +119,8 @@ button {
   transition: 0.3s ease-in-out;
   color: var(--font-primary);
   border-radius: 10px;
+  background: none;
+  border: none;
 }
 
 button,
@@ -137,6 +139,10 @@ button:hover {
 button:active,
 a:active {
   box-shadow: none;
+}
+
+hr {
+  width: 90%;
 }
 
 #root {

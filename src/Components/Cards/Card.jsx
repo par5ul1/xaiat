@@ -18,9 +18,11 @@ const Card = ({ primary, secondary, tertiary, data, modal }) => {
         <h5>{secondary}</h5>
         <h6>{tertiary}</h6>
       </div>
-      <button className='edit-btn' onClick={toggleModal}>
-        <i className='fa-regular fa-pen-to-square'></i>
-      </button>
+      {data && (
+        <button className='edit-btn' onClick={toggleModal}>
+          <i className='fa-regular fa-pen-to-square'></i>
+        </button>
+      )}
       {modalOpen &&
         React.cloneElement(modal, {
           isOpen: modalOpen,

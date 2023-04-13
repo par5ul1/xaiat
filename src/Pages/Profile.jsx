@@ -16,7 +16,6 @@ import TextInput from "../Components/General/TextInput";
 import localforage from "localforage";
 
 const Profile = () => {
-  const profilePath = "/jsons/profile.json";
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState({
@@ -34,6 +33,7 @@ const Profile = () => {
     interests: []
   });
 
+  // TODO: useCallback
   const updateProfile = (key, value) => {
     setProfile({
       ...profile,
@@ -41,6 +41,7 @@ const Profile = () => {
     });
   };
 
+  // TODO: useCallback
   const removeFromArrayInProfile = (key, index) => {
     let value = [...profile[key]];
     value.splice(index, 1);
@@ -61,6 +62,10 @@ const Profile = () => {
   const loadProfile = async () => {
     try {
       const profile = await localforage.getItem("profile");
+      // XXX: The code below will load from a json file. Implement later
+      // const profile = await fetch("jsons/profile.json").then((response) =>
+      //   response.json()
+      // );
       if (profile) {
         setProfile(profile);
       } else {
@@ -77,14 +82,14 @@ const Profile = () => {
 
   return (
     <>
-      <div id='header'>
+      <section id='header'>
         <h1>Tell us all* about yourself!</h1>
         <h4>
           *put <em>everything</em> here; we'll worry about tailoring later 😊
         </h4>
-      </div>
-      {/* TODO: Make into component */}
-      <div id='contact' className='container'>
+      </section>
+      {/* TODO: Make sections into components */}
+      <section id='contact' className='container'>
         <Header hint='all text is formatted exactly as you enter it. This also includes custom HTML such as &lt;u&gt; or &lt;i&gt;.'>
           Contact
         </Header>
@@ -120,9 +125,9 @@ const Profile = () => {
             }
           ></TextInput>
         </div>
-      </div>
+      </section>
 
-      <div id='links' className='container'>
+      <section id='links' className='container'>
         <Header>Links</Header>
         {!profile.links.length == 0 && (
           <CardList>
@@ -139,9 +144,9 @@ const Profile = () => {
           placeholder='Enter Link (e.g. https://google.com)'
           onAdd={(val) => updateProfile("links", [...profile.links, val])}
         ></MicroCardAdder>
-      </div>
+      </section>
 
-      <div id='education' className='container'>
+      <section id='education' className='container'>
         <Header>Education</Header>
         <CardList>
           {profile.educations.map((education, index) => (
@@ -173,9 +178,9 @@ const Profile = () => {
             />
           </CardAdder>
         </CardList>
-      </div>
+      </section>
 
-      <div id='experience' className='container'>
+      <section id='experience' className='container'>
         <Header>Experience</Header>
         <CardList>
           {profile.experiences.map((experience, index) => (
@@ -219,9 +224,9 @@ const Profile = () => {
             />
           </CardAdder>
         </CardList>
-      </div>
+      </section>
 
-      <div id='projects' className='container'>
+      <section id='projects' className='container'>
         <Header>Projects</Header>
         <CardList>
           {profile.projects.map((project, index) => (
@@ -250,9 +255,9 @@ const Profile = () => {
             />
           </CardAdder>
         </CardList>
-      </div>
+      </section>
 
-      <div id='skills' className='container'>
+      <section id='skills' className='container'>
         <Header>Skills</Header>
         {!profile.skills.length == 0 && (
           <CardList fullWidth={false}>
@@ -270,9 +275,9 @@ const Profile = () => {
           placeholder='Enter a skill (e.g. Photoshop, Spanish, etc.)'
           onAdd={(val) => updateProfile("skills", [...profile.skills, val])}
         ></MicroCardAdder>
-      </div>
+      </section>
 
-      <div id='interests' className='container'>
+      <section id='interests' className='container'>
         <Header>Interests</Header>
         {!profile.interests.length == 0 && (
           <CardList fullWidth={false}>
@@ -292,9 +297,9 @@ const Profile = () => {
             updateProfile("interests", [...profile.interests, val])
           }
         ></MicroCardAdder>
-      </div>
+      </section>
 
-      <div id='terminal-btns' className='container'>
+      <section id='terminal-btns' className='container'>
         <button
           className='cancel-btn'
           onClick={() => confirm("Confirm Cancel") && navigate("/")}
@@ -310,7 +315,7 @@ const Profile = () => {
         >
           Save
         </button>
-      </div>
+      </section>
     </>
   );
 };

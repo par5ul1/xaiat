@@ -15,7 +15,7 @@ const Home = () => {
   // TEMP: This is for debug only
   const newResume = () => {
     setResumes((resumes) => {
-      return [...resumes, {}];
+      return [...resumes, { title: "", content: {} }];
     });
   };
 
@@ -69,7 +69,6 @@ const Home = () => {
               onClick={() =>
                 navigate("/resume/edit", {
                   state: {
-                    resumes,
                     index
                   }
                 })
@@ -78,14 +77,13 @@ const Home = () => {
           ))}
           <button
             className='new-card-btn'
-            onClick={() =>
+            onClick={() => {
               navigate("/resume/new", {
                 state: {
-                  resumes,
                   index: resumes.length
                 }
-              })
-            }
+              });
+            }}
           >
             <i className='fa-solid fa-plus'></i>
           </button>

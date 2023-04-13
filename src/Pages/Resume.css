@@ -1,0 +1,92 @@
+#resume {
+  background: white;
+  color: black;
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  padding: 0.25in;
+  font-family: "Public Sans", sans-serif;
+  line-height: 14pt;
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact; /* Chrome/Safari/Edge/Opera */
+  print-color-adjust: exact; /* Chrome/Safari/Edge/Opera */
+}
+
+@media print {
+  @page {
+    margin: 0;
+  }
+}
+
+#resume-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#resume a {
+  text-decoration: none;
+  font-size: 10pt !important;
+  color: black;
+  margin: 0;
+  margin-inline: 2pt;
+}
+
+#resume h1 {
+  font-size: 15pt !important;
+  font-weight: var(--semi-bold-wt);
+  margin: 5pt;
+}
+
+#resume h2 {
+  font-size: 12pt !important;
+  font-weight: var(--semi-bold-wt);
+  margin: 0;
+  margin-block-start: 10pt;
+}
+
+#resume h3 {
+  font-size: 10pt !important;
+  font-weight: var(--semi-bold-wt);
+  margin: 0;
+}
+
+#resume h4 {
+  font-size: 10pt !important;
+  margin: 0;
+  font-weight: normal;
+  color: grey;
+}
+
+#resume p {
+  display: inline;
+}
+
+#resume p,
+#resume li,
+#resume ul,
+#resume u,
+#resume i {
+  font-size: 10pt !important;
+  margin: 0;
+}
+
+#resume span {
+  font-size: 10pt !important;
+}
+
+#resume ul {
+  margin: 0.25em;
+}
+
+#resume .two-columns {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
