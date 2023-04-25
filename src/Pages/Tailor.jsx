@@ -1,5 +1,7 @@
 import "./Tailor.css";
 
+import * as ReactDOMServer from "react-dom/server";
+
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { json, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -36,6 +38,17 @@ const Tailor = () => {
     skills: [],
     interests: []
   });
+
+  const [settings, setSettings] = useState({});
+
+  const resumeComponent = (
+    <Resume
+      header={{ contacts: profile.contacts, links: profile.links }}
+      info={resume.content}
+      order={resume.order}
+      settings={settings}
+    />
+  );
 
   const loadedResumes = useRef(false);
 
@@ -127,6 +140,19 @@ const Tailor = () => {
     }
   };
 
+  const loadSettings = async () => {
+    try {
+      const settings = await localforage.getItem("settings");
+      if (settings) {
+        setSettings(settings);
+      } else {
+        console.warn("No settings found in local storage.");
+      }
+    } catch (err) {
+      console.error("Error loading settings from local storage:", err);
+    }
+  };
+
   const saveResumes = async () => {
     try {
       let newResumes = [...resumes];
@@ -140,6 +166,7 @@ const Tailor = () => {
   useEffect(() => {
     loadResumes();
     loadProfile();
+    loadSettings();
   }, []);
 
   useEffect(() => {
@@ -156,18 +183,58 @@ const Tailor = () => {
     window.addEventListener("resize", updateResumeTransform);
   }, []);
 
-  const handleDownload = () => {
-    navigate("/resume/save", {
-      state: {
-        content: {
-          header: { contacts: profile.contacts, links: profile.links },
-          info: resume.content,
-          order: resume.order
-        }
-      }
-    });
+  const resumeToHTML = () => {
+    // Temporarily suppressing errors for rendering
+    const originalConsoleError = console.error;
+    console.error = () => {};
+    const html = ReactDOMServer.renderToStaticMarkup(resumeComponent);
 
-    console.log(resume);
+    // Restore errors
+    console.error = originalConsoleError;
+
+    const stylesheet = Array.from(document.styleSheets)
+      .filter((sheet) => sheet.href === null)
+      .map((sheet) =>
+        Array.from(sheet.cssRules)
+          .map((rule) => rule.cssText)
+          .join("\n")
+      )
+      .join("\n");
+
+    const finalHtml = `<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      ${stylesheet}
+    </style>
+  </head>
+  <body>
+    ${html}
+  </body>
+</html>
+`;
+
+    return finalHtml;
+  };
+
+  const handleDownload = () => {
+    const iframe = document.createElement("iframe");
+
+    iframe.width = "0";
+    iframe.height = "0";
+
+    document.body.appendChild(iframe);
+
+    (iframe.contentDocument || iframe.contentWindow.document).body.innerHTML =
+      resumeToHTML();
+
+    iframe.addEventListener("load", () => {
+      iframe.contentWindow.print();
+
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+      }, 100);
+    });
   };
 
   return (
@@ -401,11 +468,7 @@ const Tailor = () => {
             transform: `scale(${resumeTransform})`
           }}
         >
-          <Resume
-            header={{ contacts: profile.contacts, links: profile.links }}
-            info={resume.content}
-            order={resume.order}
-          />
+          {resumeComponent}
         </div>
       </div>
     </>
