@@ -1,15 +1,22 @@
-import './CardList.css'
+import "./CardList.css";
 
 const CardList = ({ children, fullWidth = true }) => {
   return (
-    <div style={
-      fullWidth ? {
-        flexDirection: "column"
-      } : {
-        flexDirection: "row"
+    <div
+      style={
+        fullWidth
+          ? {
+              flexDirection: "column"
+            }
+          : {
+              flexDirection: "row"
+            }
       }
-    } className="card-list">{children}</div >
-  )
-}
+      className='card-list'
+    >
+      {children}
+    </div>
+  );
+};
 
 export default CardList;

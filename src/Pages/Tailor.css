@@ -49,3 +49,11 @@
 .active > * {
   background: var(--positive);
 }
+
+.active h6 {
+  color: var(--font-primary);
+}
+
+[data-rbd-draggable-id] .micro-card {
+  cursor: grab !important;
+}

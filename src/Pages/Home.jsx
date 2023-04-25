@@ -12,13 +12,6 @@ const Home = () => {
 
   const [resumes, setResumes] = useState([]);
 
-  // TEMP: This is for debug only
-  const newResume = () => {
-    setResumes((resumes) => {
-      return [...resumes, { title: "", content: {} }];
-    });
-  };
-
   const saveResumes = async () => {
     try {
       await localforage.setItem("resumes", resumes);
@@ -52,12 +45,11 @@ const Home = () => {
 
   return (
     <>
-      <button
-        href='build.html'
-        className='profile-btn'
-        onClick={() => navigate("/profile")}
-      >
+      <button className='profile-btn' onClick={() => navigate("/profile")}>
         <i className='fa-solid fa-user'></i>
+      </button>
+      <button className='settings-btn' onClick={() => navigate("/settings")}>
+        <i className='fa-solid fa-gear'></i>
       </button>
       <div className='container' id='resumes'>
         <h2>Resumes</h2>
@@ -73,6 +65,19 @@ const Home = () => {
                   }
                 })
               }
+              onDelete={() => {
+                setResumes((resumes) => {
+                  resumes.splice(index, 1);
+                  return [...resumes];
+                });
+              }}
+              onClone={() => {
+                setResumes((resumes) => {
+                  const element = resumes[index];
+                  resumes.splice(index, 0, element);
+                  return [...resumes];
+                });
+              }}
             />
           ))}
           <button
@@ -88,8 +93,7 @@ const Home = () => {
             <i className='fa-solid fa-plus'></i>
           </button>
           {/* TEMP: for debug only */}
-          <div onClick={() => setResumes([])}>Clear</div>
-          <div onClick={() => newResume()}>Add</div>
+          {/* <div onClick={() => setResumes([])}>Clear</div> */}
         </CardList>
       </div>
     </>

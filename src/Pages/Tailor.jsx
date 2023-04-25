@@ -1,5 +1,6 @@
 import "./Tailor.css";
 
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { json, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
@@ -19,7 +20,7 @@ const Tailor = () => {
 
   // XXX: Potential derived states
   const [resumes, setResumes] = useState([]);
-  const [resume, setResume] = useState({ title: "", content: {} });
+  const [resume, setResume] = useState({ title: "", content: {}, order: [] });
 
   const [profile, setProfile] = useState({
     contacts: {
@@ -41,19 +42,26 @@ const Tailor = () => {
   const toggleItem = (key, value) => {
     const index = findContentIndexInProfile(key, value);
     if (index > -1) {
+      // FIXME: Buggy removing elements when stuff is still there. Only cleanup if fully empty
       let newItem = [...resume.content[key]];
       newItem.splice(index, 1);
-      console.log(newItem);
+
+      let newOrder = [...resume.order];
+      !newItem.length && newOrder.splice(resume.order.indexOf(key), 1);
       setResume({
         ...resume,
+        order: newOrder,
         content: {
           ...resume.content,
           [key]: newItem
         }
       });
     } else {
+      const newOrder =
+        resume.order.indexOf(key) > -1 ? resume.order : [...resume.order, key];
       setResume({
         ...resume,
+        order: newOrder,
         content: {
           ...resume.content,
           [key]: resume.content?.[key]
@@ -70,6 +78,23 @@ const Tailor = () => {
       JSON.stringify(item) == JSON.stringify(value) && (index = i);
     });
     return index;
+  };
+
+  // TEMP: This should go once I move to Immer or something. For now, I'll make it work.
+  const addSkillToCategory = (category, skill) => {
+    let newResume = { ...resume };
+    newResume.content?.skills?.map((skillEntry) => {
+      if (skillEntry.title == category) skillEntry.skills.push(skill);
+    });
+    setResume(newResume);
+  };
+
+  const removeSkillFromCategory = (category, index) => {
+    let newResume = { ...resume };
+    newResume.content?.skills?.map((skillEntry) => {
+      if (skillEntry.title == category) skillEntry.skills.splice(index, 1);
+    });
+    setResume(newResume);
   };
 
   const loadProfile = async () => {
@@ -119,7 +144,6 @@ const Tailor = () => {
 
   useEffect(() => {
     loadedResumes.current && saveResumes();
-    console.log(resume);
   }, [resumes, resume]);
 
   const [resumeTransform, setResumeTransform] = useState(1);
@@ -137,17 +161,28 @@ const Tailor = () => {
       state: {
         content: {
           header: { contacts: profile.contacts, links: profile.links },
-          info: resume.content
+          info: resume.content,
+          order: resume.order
         }
       }
     });
+
+    console.log(resume);
   };
 
   return (
     <>
       <div id='tailor'>
         <div id='sidebar'>
-          <button onClick={handleDownload}>Download</button>
+          <button
+            onClick={handleDownload}
+            style={{
+              width: "fit-content",
+              alignSelf: "flex-end"
+            }}
+          >
+            <i className='fa-solid fa-download'></i>
+          </button>
           <TextInput
             label={"Resume Name"}
             inputValue={resume.title ? resume.title : ""}
@@ -175,44 +210,86 @@ const Tailor = () => {
           >
             Skills
           </Header>
-          {resume.content.skills &&
-            resume.content.skills.map(({ title, skills }) => {
-              return (
-                <>
-                  <span style={{ display: "flex", gap: "1vmin" }}>
-                    <Header large={false}>{title}</Header>
-                    <button
-                    // onClick={() =>
-                    //   // TODO: Implement category delete
-                    // }
-                    >
-                      <i className='fa-solid fa-xmark'></i>
-                    </button>
-                  </span>
+          <DragDropContext
+            onDragEnd={(result) => {
+              console.log(result);
+              if (
+                !result.destination ||
+                result.destination.droppableId == "skills-Uncategorized"
+              )
+                return;
+              addSkillToCategory(
+                result.destination.droppableId.split("-")[1],
+                profile.skills[result.source.index]
+              );
+            }}
+          >
+            {resume.content.skills &&
+              resume.content.skills.map(({ title, skills }) => {
+                return (
+                  <Droppable droppableId={"skill-" + title}>
+                    {(provided) => (
+                      <div {...provided.droppableProps} ref={provided.innerRef}>
+                        <span style={{ display: "flex", gap: "1vmin" }}>
+                          <Header large={false}>{title}</Header>
+                          <button
+                          // onClick={() =>
+                          //   // TODO: Implement category delete
+                          // }
+                          >
+                            <i className='fa-solid fa-xmark'></i>
+                          </button>
+                        </span>
+                        <CardList fullWidth={false}>
+                          {skills.map((skill, index) => {
+                            return (
+                              <div className='active'>
+                                <MicroCard
+                                  key={"skill" + index}
+                                  width='auto'
+                                  value={skill}
+                                  onDelete={() =>
+                                    removeSkillFromCategory(title, index)
+                                  }
+                                />
+                              </div>
+                            );
+                          })}
+                        </CardList>
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                );
+              })}
+            <Header large={false}>Uncategorized</Header>
+            <Droppable droppableId='skills-Uncategorized'>
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
                   <CardList fullWidth={false}>
-                    {skills.map((skill, index) => {
-                      return (
-                        <div className='enabled'>
-                          <MicroCard
-                            key={"skill" + index}
-                            width='auto'
-                            value={skill}
-                          />
-                        </div>
-                      );
-                    })}
+                    {profile.skills.map((skill, index) => (
+                      <Draggable
+                        key={"skill-uncategorized" + index}
+                        draggableId={"skill-uncategorized" + index}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <MicroCard width='auto' value={skill} />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
                   </CardList>
-                </>
-              );
-            })}
-          <Header large={false}>Uncategorized</Header>
-          <CardList fullWidth={false}>
-            {profile.skills.map((skill, index) => {
-              return (
-                <MicroCard key={"skill" + index} width='auto' value={skill} />
-              );
-            })}
-          </CardList>
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
           <AddableTextInput
             width='25vw'
             placeholder='Enter a tag (e.g. Technical, Languages, etc.)'
@@ -317,7 +394,7 @@ const Tailor = () => {
             })}
           </CardList>
         </div>
-        {/* XXX: This transform is hardcoded-sh for now. */}
+        {/* XXX: This transform is hardcoded-ish for now. */}
         <div
           id='resume-container'
           style={{
@@ -327,6 +404,7 @@ const Tailor = () => {
           <Resume
             header={{ contacts: profile.contacts, links: profile.links }}
             info={resume.content}
+            order={resume.order}
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import "./Profile.css";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, json, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Card from "../Components/Cards/Card";
@@ -52,6 +52,9 @@ const Profile = () => {
   };
 
   const saveProfile = async () => {
+    // XXX: Temp
+    console.log(JSON.stringify(profile));
+
     try {
       await localforage.setItem("profile", profile);
     } catch (err) {

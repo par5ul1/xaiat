@@ -1,0 +1,12 @@
+#settings {
+  width: 80vw;
+  display: flex;
+  flex-direction: column;
+  gap: 2vmin;
+}
+
+#settings button {
+  width: fit-content;
+  padding: 10px;
+  box-shadow: var(--shadow);
+}

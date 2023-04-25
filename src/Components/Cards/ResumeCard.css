@@ -1,4 +1,5 @@
 .resume-card {
+  position: relative;
   display: flex;
   width: 12vmin;
   height: 16vmin;
@@ -8,7 +9,6 @@
   align-items: center;
   background: var(--accent);
   box-shadow: var(--shadow);
-  cursor: pointer;
 }
 
 .resume-card > h3 {
@@ -16,4 +16,53 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.resume-card-drop-down {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 1vmin;
+  transition: 0.2s;
+}
+
+.resume-card-drop-down.open {
+  background: var(--secondary);
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  height: 16vmin;
+  width: 12vmin;
+}
+
+.resume-card-drop-down button {
+  background: none;
+}
+
+.resume-card-drop-down-options > button {
+  font-size: var(--small-sz);
+  text-align: left;
+}
+
+.resume-card-drop-down button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.resume-card-drop-down > .resume-card-drop-down-options {
+  display: none;
+}
+
+.resume-card-drop-down.open > .resume-card-drop-down-options {
+  display: unset;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
+.resume-card-drop-down-options > button:hover {
+  font-weight: var(--semi-bold-wt);
 }
