@@ -24,21 +24,21 @@ There is currently only one template available, and you can only customize the a
 
 ## TODOs:
 
-[] Add better documentation to the source code
+[ ] Add better documentation to the source code
 
-[] Add a WYSIWYG instead of allowing users to write custom HTML tags
+[ ] Add a WYSIWYG instead of allowing users to write custom HTML tags
 
-[] Attempt to sort items by date
+[ ] Attempt to sort items by date
 
-[] Allow for expanding inputs for bullet points
+[ ] Allow for expanding inputs for bullet points
 
-[] Validate links before trying to hyperlink them in the resume
+[ ] Validate links before trying to hyperlink them in the resume
 
-[] Allow the user to modify profile locally per-resume
+[ ] Allow the user to modify profile locally per-resume
 
-[] Make small cards editable instead of forcing deletion and recreation.
+[ ] Make small cards editable instead of forcing deletion and recreation.
 
-[] Change the profile auto-save
+[ ] Change the profile auto-save
 
-[] Create a standard for custom resume templates
+[ ] Create a standard for custom resume templates
 
