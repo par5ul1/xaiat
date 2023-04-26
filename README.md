@@ -1,6 +1,6 @@
 # Xaiat - A résumé tailor
 
-> Note: this is a work-in-progress. The code has still not been documented and certain behavior is subject to change. Still, the current code should be completely usable and without major bugs.
+> Note: this is a work-in-progress. The code has still not been documented and certain behavior is subject to change. Still, the current code should be completely usable and free from major bugs.
 
 ## How do I use it?
 
@@ -25,12 +25,20 @@ There is currently only one template available, and you can only customize the a
 ## TODOs:
 
 [] Add better documentation to the source code
+
 [] Add a WYSIWYG instead of allowing users to write custom HTML tags
+
 [] Attempt to sort items by date
+
 [] Allow for expanding inputs for bullet points
+
 [] Validate links before trying to hyperlink them in the resume
+
 [] Allow the user to modify profile locally per-resume
+
 [] Make small cards editable instead of forcing deletion and recreation.
+
 [] Change the profile auto-save
+
 [] Create a standard for custom resume templates
 
