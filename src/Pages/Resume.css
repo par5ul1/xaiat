@@ -101,11 +101,16 @@
 
 #resume p,
 #resume li,
+#resume code,
 #resume ul,
 #resume u,
 #resume i {
   font-size: 10pt !important;
   margin: 0;
+}
+
+#resume code {
+  font-family: monospace !important;
 }
 
 #resume span {

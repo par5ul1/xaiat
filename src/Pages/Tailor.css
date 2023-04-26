@@ -54,6 +54,10 @@
   color: var(--font-primary);
 }
 
+.active h5 {
+  color: var(--font-primary);
+}
+
 [data-rbd-draggable-id] .micro-card {
   cursor: grab !important;
 }

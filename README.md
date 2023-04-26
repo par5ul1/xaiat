@@ -1,24 +1,36 @@
 # Xaiat - A résumé tailor
 
-> Note: this version is incredibly limited and rather useless. I am mostly posting it here for documentation and future reference. There is a single template (my personal one) and you need to edit code to create a résumé.
+> Note: this is a work-in-progress. The code has still not been documented and certain behavior is subject to change. Still, the current code should be completely usable and without major bugs.
+
+## How do I use it?
+
+Two ways. You can either use a live version [here](#) (Not Currently Live), or you can clone the repo and run it on your machine locally. The steps for that can be found below:
 
 ## Dependencies
 
-You just need to have Node.js installed on your computer. You can download a copy from [here](https://nodejs.org/en/).
+You first need to have Node.js installed on your computer. If you don't already, you can download a copy from [here](https://nodejs.org/en/).
 
 ## Set-up
 
-To get started, simply clone the repo on your machine. Then, make a copy of the _resume_template.json_ file found under _templates_ and place it in the project's root directory. Rename it (**this is important**) _resume.json_. From there, simply add your information to the JSON file. An array means you can have multiple entries so feel free to make as many copies of the objects as you need — just remember the comma.
+To get started, simply clone the repo on your machine. Then, you can `cd` into the project's directory and run `npm install` to install all the package dependencies. This project uses Vite, so npm should also install that.
 
-Once you are happy with your JSON file, you can simply `cd` into the project's root directory and run:
+Once the packages have been installed, you can simply `npm run dev` to host the app on your localhost. Vite will give you the port number in the console.
 
-```bash
-npm install
-node generator.js
-```
+## Contribution and customization
 
-Then, all that's left is for you to open _public/resume.html_ and print the page (Cmd+P on Mac, Ctrl+P on Windows) and _Save as PDF_. Just make sure "Background graphics" (or browser equivalent) is checked to get the colors and the lines.
+Currently, the app is still in progress. I am adding new features and polishing up other ones. If you wish to help, please consult the TODO list below for a list of things that still need implementing or fixing. Feel free to open an Issue to ask for clarification.
 
-## Customization
+There is currently only one template available, and you can only customize the accent color and the font (from the Settings page). If you have React knowledge and want to contribute a template, open an Issue and we can figure out how to do that. I do plan on expanding the template library and standardizing the template creation process (see TODOs below) but it is fairly low on my priorities list right now.
 
-As I said, this release is far from finished and it's more like a proof of concept. That being said, the templates in _templates/parsuli_ should be readable enough with a little bit of PugJS experience. You can easily change the order of sections (or take some out), for example, by modifying _resume.pug_ and playing around with the `include`s.
+## TODOs:
+
+[] Add better documentation to the source code
+[] Add a WYSIWYG instead of allowing users to write custom HTML tags
+[] Attempt to sort items by date
+[] Allow for expanding inputs for bullet points
+[] Validate links before trying to hyperlink them in the resume
+[] Allow the user to modify profile locally per-resume
+[] Make small cards editable instead of forcing deletion and recreation.
+[] Change the profile auto-save
+[] Create a standard for custom resume templates
+

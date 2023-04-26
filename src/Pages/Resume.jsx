@@ -12,7 +12,8 @@ const Resume = ({
   header: { contacts, links } = {},
   info = {},
   order = [],
-  settings
+  settings,
+  onReorder
 }) => {
   const itemSeparator = (
     <span
@@ -66,8 +67,7 @@ const Resume = ({
             if (!result.destination) return;
 
             // TODO: Allow for changes to persist
-            const temp = order.splice(result.source.index, 1)[0];
-            order.splice(result.destination.index, 0, temp);
+            onReorder(result.source.index, result.destination.index);
           }}
         >
           <Droppable droppableId={"resume-dropzone"}>
@@ -79,8 +79,8 @@ const Resume = ({
 
                     let body = [];
                     switch (category) {
-                      case "educations":
-                        info.educations.map((education) => {
+                      case "Education":
+                        info.Education.map((education) => {
                           body.push(
                             <>
                               <h3
@@ -124,8 +124,8 @@ const Resume = ({
                           );
                         });
                         break;
-                      case "experiences":
-                        info.experiences.map((experience) => {
+                      case "Work Experience":
+                        info["Work Experience"].map((experience) => {
                           body.push(
                             <>
                               <h3
@@ -174,14 +174,14 @@ const Resume = ({
                           );
                         });
                         break;
-                      case "interests":
+                      case "Interests":
                         body.push(
                           <>
                             <div>
-                              {info.interests.map((interest, index) => (
+                              {info.Interests.map((interest, index) => (
                                 <>
                                   <p>{interest}</p>
-                                  {index < info.interests.length - 1 &&
+                                  {index < info.Interests.length - 1 &&
                                     itemSeparator}
                                 </>
                               ))}
@@ -189,8 +189,8 @@ const Resume = ({
                           </>
                         );
                         break;
-                      case "projects":
-                        info.projects.map((project) => {
+                      case "Projects":
+                        info.Projects.map((project) => {
                           body.push(
                             <>
                               <div className='two-columns'>
@@ -242,8 +242,8 @@ const Resume = ({
                           );
                         });
                         break;
-                      case "skills":
-                        info.skills.map(({ title, skills }) => {
+                      case "Skills":
+                        info.Skills.map(({ title, skills }) => {
                           body.push(
                             <>
                               <div className='two-columns'>
@@ -286,8 +286,7 @@ const Resume = ({
                             {/* FIXME: This is only per string for now. We will see about doing perword when we bring in custom titles */}
                             <h2>
                               <span {...provided.dragHandleProps} />
-                              {category.charAt(0).toUpperCase() +
-                                category.slice(1)}
+                              {category}
                             </h2>
                             {sectionSeparator}
                             {body.map((element) => element)}

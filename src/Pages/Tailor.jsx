@@ -25,28 +25,38 @@ const Tailor = () => {
   const [resume, setResume] = useState({ title: "", content: {}, order: [] });
 
   const [profile, setProfile] = useState({
-    contacts: {
+    Contact: {
       name: "",
       email: "",
       telephone: "",
       address: ""
     },
-    links: [],
-    educations: [],
-    experiences: [],
-    projects: [],
-    skills: [],
-    interests: []
+    Links: [],
+    Education: [],
+    "Work Experience": [],
+    Projects: [],
+    Skills: [],
+    Interests: []
   });
 
   const [settings, setSettings] = useState({});
 
   const resumeComponent = (
     <Resume
-      header={{ contacts: profile.contacts, links: profile.links }}
+      header={{ contacts: profile.Contact, links: profile.Links }}
       info={resume.content}
       order={resume.order}
       settings={settings}
+      onReorder={(src, dst) => {
+        setResume((resume) => {
+          const temp = resume.order.splice(src, 1)[0];
+
+          const newOrder = resume.order;
+          newOrder.splice(dst, 0, temp);
+
+          return { ...resume, order: newOrder };
+        });
+      }}
     />
   );
 
@@ -55,7 +65,6 @@ const Tailor = () => {
   const toggleItem = (key, value) => {
     const index = findContentIndexInProfile(key, value);
     if (index > -1) {
-      // FIXME: Buggy removing elements when stuff is still there. Only cleanup if fully empty
       let newItem = [...resume.content[key]];
       newItem.splice(index, 1);
 
@@ -96,7 +105,7 @@ const Tailor = () => {
   // TEMP: This should go once I move to Immer or something. For now, I'll make it work.
   const addSkillToCategory = (category, skill) => {
     let newResume = { ...resume };
-    newResume.content?.skills?.map((skillEntry) => {
+    newResume.content?.Skills?.map((skillEntry) => {
       if (skillEntry.title == category) skillEntry.skills.push(skill);
     });
     setResume(newResume);
@@ -104,7 +113,7 @@ const Tailor = () => {
 
   const removeSkillFromCategory = (category, index) => {
     let newResume = { ...resume };
-    newResume.content?.skills?.map((skillEntry) => {
+    newResume.content?.Skills?.map((skillEntry) => {
       if (skillEntry.title == category) skillEntry.skills.splice(index, 1);
     });
     setResume(newResume);
@@ -154,6 +163,7 @@ const Tailor = () => {
   };
 
   const saveResumes = async () => {
+    console.log(resume.order);
     try {
       let newResumes = [...resumes];
       newResumes[location.state?.index] = resume;
@@ -214,6 +224,7 @@ const Tailor = () => {
 </html>
 `;
 
+    console.log(finalHtml);
     return finalHtml;
   };
 
@@ -229,9 +240,12 @@ const Tailor = () => {
       resumeToHTML();
 
     iframe.addEventListener("load", () => {
+      const title = document.title;
+      document.title = profile.Contact.name.split(" ").join("") + "_Resume";
       iframe.contentWindow.print();
 
       setTimeout(() => {
+        document.title = title;
         document.body.removeChild(iframe);
       }, 100);
     });
@@ -287,12 +301,12 @@ const Tailor = () => {
                 return;
               addSkillToCategory(
                 result.destination.droppableId.split("-")[1],
-                profile.skills[result.source.index]
+                profile.Skills[result.source.index]
               );
             }}
           >
-            {resume.content.skills &&
-              resume.content.skills.map(({ title, skills }) => {
+            {resume.content.Skills &&
+              resume.content.Skills.map(({ title, skills }) => {
                 return (
                   <Droppable droppableId={"skill-" + title}>
                     {(provided) => (
@@ -334,7 +348,7 @@ const Tailor = () => {
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   <CardList fullWidth={false}>
-                    {profile.skills.map((skill, index) => (
+                    {profile.Skills.map((skill, index) => (
                       <Draggable
                         key={"skill-uncategorized" + index}
                         draggableId={"skill-uncategorized" + index}
@@ -360,17 +374,17 @@ const Tailor = () => {
           <AddableTextInput
             width='25vw'
             placeholder='Enter a tag (e.g. Technical, Languages, etc.)'
-            onAdd={(tag) => toggleItem("skills", { title: tag, skills: [] })}
+            onAdd={(tag) => toggleItem("Skills", { title: tag, skills: [] })}
           />
 
           <Header>Education</Header>
           <CardList>
-            {profile.educations.map((education, index) => {
+            {profile.Education.map((education, index) => {
               return (
                 <div
-                  onClick={() => toggleItem("educations", education)}
+                  onClick={() => toggleItem("Education", education)}
                   className={
-                    findContentIndexInProfile("educations", education) > -1
+                    findContentIndexInProfile("Education", education) > -1
                       ? "active"
                       : null
                   }
@@ -387,12 +401,13 @@ const Tailor = () => {
 
           <Header>Experience</Header>
           <CardList>
-            {profile.experiences.map((experience, index) => {
+            {profile["Work Experience"].map((experience, index) => {
               return (
                 <div
-                  onClick={() => toggleItem("experiences", experience)}
+                  onClick={() => toggleItem("Work Experience", experience)}
                   className={
-                    findContentIndexInProfile("experiences", experience) > -1
+                    findContentIndexInProfile("Work Experience", experience) >
+                    -1
                       ? "active"
                       : null
                   }
@@ -419,12 +434,12 @@ const Tailor = () => {
 
           <Header>Projects</Header>
           <CardList>
-            {profile.projects.map((project, index) => {
+            {profile.Projects.map((project, index) => {
               return (
                 <div
-                  onClick={() => toggleItem("projects", project)}
+                  onClick={() => toggleItem("Projects", project)}
                   className={
-                    findContentIndexInProfile("projects", project) > -1
+                    findContentIndexInProfile("Projects", project) > -1
                       ? "active"
                       : null
                   }
@@ -441,12 +456,12 @@ const Tailor = () => {
 
           <Header>Interests</Header>
           <CardList fullWidth={false}>
-            {profile.interests.map((interest, index) => {
+            {profile.Interests.map((interest, index) => {
               return (
                 <div
-                  onClick={() => toggleItem("interests", interest)}
+                  onClick={() => toggleItem("Interests", interest)}
                   className={
-                    findContentIndexInProfile("interests", interest) > -1
+                    findContentIndexInProfile("Interests", interest) > -1
                       ? "active"
                       : null
                   }

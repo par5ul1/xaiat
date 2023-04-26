@@ -19,18 +19,18 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState({
-    contacts: {
+    Contact: {
       name: "",
       email: "",
       telephone: "",
       address: ""
     },
-    links: [],
-    educations: [],
-    experiences: [],
-    projects: [],
-    skills: [],
-    interests: []
+    Links: [],
+    Education: [],
+    "Work Experience": [],
+    Projects: [],
+    Skills: [],
+    Interests: []
   });
 
   // TODO: useCallback
@@ -52,9 +52,6 @@ const Profile = () => {
   };
 
   const saveProfile = async () => {
-    // XXX: Temp
-    console.log(JSON.stringify(profile));
-
     try {
       await localforage.setItem("profile", profile);
     } catch (err) {
@@ -99,32 +96,32 @@ const Profile = () => {
         <div>
           <TextInput
             label='Full Name'
-            inputValue={profile.contacts.name}
+            inputValue={profile.Contact.name}
             updateInputValue={(val) =>
-              updateProfile("contacts", { ...profile.contacts, name: val })
+              updateProfile("Contact", { ...profile.Contact, name: val })
             }
           ></TextInput>
           <TextInput
             label='Email'
-            inputValue={profile.contacts.email}
+            inputValue={profile.Contact.email}
             updateInputValue={(val) =>
-              updateProfile("contacts", { ...profile.contacts, email: val })
+              updateProfile("Contact", { ...profile.Contact, email: val })
             }
           ></TextInput>
           <TextInput
             label='Telephone'
             placeholder='e.g. (888) 888-8888'
-            inputValue={profile.contacts.telephone}
+            inputValue={profile.Contact.telephone}
             updateInputValue={(val) =>
-              updateProfile("contacts", { ...profile.contacts, telephone: val })
+              updateProfile("Contact", { ...profile.Contact, telephone: val })
             }
           ></TextInput>
           <TextInput
             label='Address'
             placeholder='e.g. San Francisco, CA'
-            inputValue={profile.contacts.address}
+            inputValue={profile.Contact.address}
             updateInputValue={(val) =>
-              updateProfile("contacts", { ...profile.contacts, address: val })
+              updateProfile("Contact", { ...profile.Contact, address: val })
             }
           ></TextInput>
         </div>
@@ -132,27 +129,27 @@ const Profile = () => {
 
       <section id='links' className='container'>
         <Header>Links</Header>
-        {!profile.links.length == 0 && (
+        {!profile.Links.length == 0 && (
           <CardList>
-            {profile.links.map((link, index) => (
+            {profile.Links.map((link, index) => (
               <MicroCard
-                key={"links" + index}
+                key={"Links" + index}
                 value={link}
-                onDelete={() => removeFromArrayInProfile("links", index)}
+                onDelete={() => removeFromArrayInProfile("Links", index)}
               ></MicroCard>
             ))}
           </CardList>
         )}
         <MicroCardAdder
           placeholder='Enter Link (e.g. https://google.com)'
-          onAdd={(val) => updateProfile("links", [...profile.links, val])}
+          onAdd={(val) => updateProfile("Links", [...profile.Links, val])}
         ></MicroCardAdder>
       </section>
 
       <section id='education' className='container'>
         <Header>Education</Header>
         <CardList>
-          {profile.educations.map((education, index) => (
+          {profile.Education.map((education, index) => (
             <Card
               key={"education" + index}
               primary={education.institution}
@@ -161,11 +158,11 @@ const Profile = () => {
               modal={
                 <EducationModal
                   onSave={(newEducation) => {
-                    let updatedEductation = [...profile.educations];
+                    let updatedEductation = [...profile.Education];
                     updatedEductation[index] = newEducation;
-                    updateProfile("educations", updatedEductation);
+                    updateProfile("Education", updatedEductation);
                   }}
-                  onDelete={() => removeFromArrayInProfile("educations", index)}
+                  onDelete={() => removeFromArrayInProfile("Education", index)}
                 />
               }
             ></Card>
@@ -173,10 +170,7 @@ const Profile = () => {
           <CardAdder>
             <EducationModal
               onSave={(newEducation) =>
-                updateProfile("educations", [
-                  ...profile.educations,
-                  newEducation
-                ])
+                updateProfile("Education", [...profile.Education, newEducation])
               }
             />
           </CardAdder>
@@ -186,7 +180,7 @@ const Profile = () => {
       <section id='experience' className='container'>
         <Header>Experience</Header>
         <CardList>
-          {profile.experiences.map((experience, index) => (
+          {profile["Work Experience"].map((experience, index) => (
             <Card
               key={"experience" + index}
               primary={
@@ -205,12 +199,12 @@ const Profile = () => {
               modal={
                 <ExperienceModal
                   onSave={(newExperience) => {
-                    let updatedExperience = [...profile.experiences];
+                    let updatedExperience = [...profile["Work Experience"]];
                     updatedExperience[index] = newExperience;
-                    updateProfile("experiences", updatedExperience);
+                    updateProfile("Work Experience", updatedExperience);
                   }}
                   onDelete={() =>
-                    removeFromArrayInProfile("experiences", index)
+                    removeFromArrayInProfile("Work Experience", index)
                   }
                 />
               }
@@ -219,8 +213,8 @@ const Profile = () => {
           <CardAdder>
             <ExperienceModal
               onSave={(newExperience) =>
-                updateProfile("experiences", [
-                  ...profile.experiences,
+                updateProfile("Work Experience", [
+                  ...profile["Work Experience"],
                   newExperience
                 ])
               }
@@ -232,7 +226,7 @@ const Profile = () => {
       <section id='projects' className='container'>
         <Header>Projects</Header>
         <CardList>
-          {profile.projects.map((project, index) => (
+          {profile.Projects.map((project, index) => (
             <Card
               key={"project" + index}
               primary={project.name}
@@ -241,11 +235,11 @@ const Profile = () => {
               modal={
                 <ProjectModal
                   onSave={(newProject) => {
-                    let updatedProject = [...profile.projects];
+                    let updatedProject = [...profile.Projects];
                     updatedProject[index] = newProject;
-                    updateProfile("projects", updatedProject);
+                    updateProfile("Projects", updatedProject);
                   }}
-                  onDelete={() => removeFromArrayInProfile("projects", index)}
+                  onDelete={() => removeFromArrayInProfile("Projects", index)}
                 />
               }
             ></Card>
@@ -253,7 +247,7 @@ const Profile = () => {
           <CardAdder>
             <ProjectModal
               onSave={(newProject) =>
-                updateProfile("projects", [...profile.projects, newProject])
+                updateProfile("Projects", [...profile.Projects, newProject])
               }
             />
           </CardAdder>
@@ -262,34 +256,34 @@ const Profile = () => {
 
       <section id='skills' className='container'>
         <Header>Skills</Header>
-        {!profile.skills.length == 0 && (
+        {!profile.Skills.length == 0 && (
           <CardList fullWidth={false}>
-            {profile.skills.map((link, index) => (
+            {profile.Skills.map((link, index) => (
               <MicroCard
                 width='auto'
-                key={"skills" + index}
+                key={"Skills" + index}
                 value={link}
-                onDelete={() => removeFromArrayInProfile("skills", index)}
+                onDelete={() => removeFromArrayInProfile("Skills", index)}
               ></MicroCard>
             ))}
           </CardList>
         )}
         <MicroCardAdder
           placeholder='Enter a skill (e.g. Photoshop, Spanish, etc.)'
-          onAdd={(val) => updateProfile("skills", [...profile.skills, val])}
+          onAdd={(val) => updateProfile("Skills", [...profile.Skills, val])}
         ></MicroCardAdder>
       </section>
 
       <section id='interests' className='container'>
         <Header>Interests</Header>
-        {!profile.interests.length == 0 && (
+        {!profile.Interests.length == 0 && (
           <CardList fullWidth={false}>
-            {profile.interests.map((link, index) => (
+            {profile.Interests.map((link, index) => (
               <MicroCard
                 width='auto'
-                key={"interests" + index}
+                key={"Interests" + index}
                 value={link}
-                onDelete={() => removeFromArrayInProfile("interests", index)}
+                onDelete={() => removeFromArrayInProfile("Interests", index)}
               ></MicroCard>
             ))}
           </CardList>
@@ -297,7 +291,7 @@ const Profile = () => {
         <MicroCardAdder
           placeholder='Enter an interest (e.g. Skiing, Painting, etc.)'
           onAdd={(val) =>
-            updateProfile("interests", [...profile.interests, val])
+            updateProfile("Interests", [...profile.Interests, val])
           }
         ></MicroCardAdder>
       </section>
