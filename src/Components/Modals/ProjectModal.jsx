@@ -86,7 +86,8 @@ const ProjectModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
               onAdd={(val) =>
                 updateTempData("descriptions", [...tempData.descriptions, val])
               }
-              placeholder='Enter bullet points'
+              expandable={true}
+              placeholder='Enter bullet points one at a time'
             ></AddableTextInput>
 
             <Header large={false}>Skills Used</Header>

@@ -1,4 +1,5 @@
 .micro-card-adder {
   display: inline-flex;
   gap: 2vmin;
+  align-items: flex-end;
 }

@@ -1,7 +1,8 @@
 import "./Settings.css";
 
+import { useEffect, useRef } from "react";
+
 import localforage from "localforage";
-import { useEffect } from "react";
 import { useState } from "react";
 
 const Settings = () => {
@@ -64,16 +65,21 @@ const Settings = () => {
   const updateAccentColor = (color) => {
     setSettings((settings) => {
       settings = { ...settings, accentColor: color };
-      localforage.setItem("settings", settings);
       return settings;
     });
   };
 
+  const hasLoadedSettings = useRef(false);
   useEffect(() => {
     localforage.getItem("settings").then((settings) => {
       settings && setSettings(settings);
+      hasLoadedSettings.current = true;
     });
   }, []);
+
+  useEffect(() => {
+    hasLoadedSettings && localforage.setItem("settings", settings);
+  }, [settings]);
 
   return (
     <>
@@ -84,8 +90,16 @@ const Settings = () => {
         <h2>Resume Appearance</h2>
         <label>
           Font:
-          <select>
+          <select
+            onChange={(event) =>
+              setSettings({ ...settings, font: event.target.value })
+            }
+            value={settings.font}
+          >
             <option value='Open Sans'>Open Sans (default)</option>
+            <option value='Arial'>Arial</option>
+            <option value='Helvetica'>Helvetica</option>
+            <option value='Times New Roman'>Times New Roman</option>
           </select>
         </label>
         <label>
@@ -100,6 +114,11 @@ const Settings = () => {
         <h2>Profile Options</h2>
         <button onClick={exportProfile}>Export Profile (Backup)</button>
         <button onClick={importProfile}>Import Profile</button>
+
+        <h2>Report a Bug</h2>
+        <a href='https://github.com/par5ul1/xaiat/issues/new' target='_blank'>
+          Report
+        </a>
       </section>
     </>
   );

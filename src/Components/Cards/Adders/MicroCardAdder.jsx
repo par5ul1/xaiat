@@ -6,7 +6,13 @@ import { useState } from "react";
 
 // TODO: Fix prop drilling
 // TODO: Needs some TLC
-const AddableTextInput = ({ label, placeholder, width = "35vw", onAdd }) => {
+const AddableTextInput = ({
+  label,
+  placeholder,
+  width = "35vw",
+  expandable,
+  onAdd
+}) => {
   const [inputValue, setInputValue] = useState("");
 
   const updateInputValue = (val) => {
@@ -28,6 +34,7 @@ const AddableTextInput = ({ label, placeholder, width = "35vw", onAdd }) => {
         label={label}
         placeholder={placeholder}
         width={width}
+        expandable={expandable}
         updateInputValue={updateInputValue}
         inputValue={inputValue}
         handleSubmit={handleSubmit}

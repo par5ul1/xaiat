@@ -40,6 +40,15 @@ const Resume = ({
 
   return (
     <>
+      <style>
+        {`
+          #resume * {
+            font-family: ${
+              settings?.font ? `"${settings.font}"` : `"Open Sans"`
+            }
+          }
+        `}
+      </style>
       <div id='resume'>
         <div id='resume-header'>
           <h1>{contacts.name}</h1>

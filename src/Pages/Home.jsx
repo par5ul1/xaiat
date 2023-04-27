@@ -67,7 +67,7 @@ const Home = () => {
               }
               onDelete={() => {
                 setResumes((resumes) => {
-                  resumes.splice(index, 1);
+                  confirm("Confirm Delete") && resumes.splice(index, 1);
                   return [...resumes];
                 });
               }}

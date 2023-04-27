@@ -255,15 +255,14 @@ const Tailor = () => {
     <>
       <div id='tailor'>
         <div id='sidebar'>
-          <button
-            onClick={handleDownload}
-            style={{
-              width: "fit-content",
-              alignSelf: "flex-end"
-            }}
-          >
-            <i className='fa-solid fa-download'></i>
-          </button>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <button onClick={() => navigate(-1)}>
+              <i className='fa-solid fa-arrow-left'></i>
+            </button>
+            <button onClick={handleDownload}>
+              <i className='fa-solid fa-download'></i>
+            </button>
+          </div>
           <TextInput
             label={"Resume Name"}
             inputValue={resume.title ? resume.title : ""}
