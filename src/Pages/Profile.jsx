@@ -51,6 +51,8 @@ const Profile = () => {
     });
   };
 
+  const profileLoaded = useRef(false);
+
   const saveProfile = async () => {
     try {
       await localforage.setItem("profile", profile);
@@ -68,6 +70,7 @@ const Profile = () => {
       // );
       if (profile) {
         setProfile(profile);
+        profileLoaded.current = true;
       } else {
         console.warn("No profile found in local storage.");
       }
@@ -76,10 +79,8 @@ const Profile = () => {
     }
   };
 
-  const profileLoaded = useRef(false);
   useEffect(() => {
     loadProfile();
-    profileLoaded.current = true;
   }, []);
 
   // Auto-save

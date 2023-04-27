@@ -16,13 +16,20 @@ import Resume from "./Resume";
 import TextInput from "../Components/General/TextInput";
 import localforage from "localforage";
 
+/*
+  This component is the tailoring page. It allows the user to build up their tailored resumes.
+*/
 const Tailor = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   States                                   */
+  /* -------------------------------------------------------------------------- */
   // XXX: Potential derived states
   const [resumes, setResumes] = useState([]);
   const [resume, setResume] = useState({ title: "", content: {}, order: [] });
+  const [settings, setSettings] = useState({});
 
   const [profile, setProfile] = useState({
     Contact: {
@@ -39,8 +46,9 @@ const Tailor = () => {
     Interests: []
   });
 
-  const [settings, setSettings] = useState({});
-
+  /* -------------------------------------------------------------------------- */
+  /*                                  Constants                                 */
+  /* -------------------------------------------------------------------------- */
   const resumeComponent = (
     <Resume
       header={{ contacts: profile.Contact, links: profile.Links }}
@@ -59,9 +67,69 @@ const Tailor = () => {
       }}
     />
   );
-
   const loadedResumes = useRef(false);
 
+  /* -------------------------------------------------------------------------- */
+  /*                                  Functions                                 */
+  /* -------------------------------------------------------------------------- */
+
+  /* --------------------------------- Loaders -------------------------------- */
+  const loadProfile = async () => {
+    try {
+      const profile = await localforage.getItem("profile");
+      if (profile) {
+        setProfile(profile);
+      } else {
+        // FIXME: Okay for now, but change the body to prompt the user to create a profile
+        console.error("No profile found in local storage.");
+      }
+    } catch (err) {
+      console.error("Error loading profile from local storage:", err);
+    }
+  };
+
+  const loadResumes = async () => {
+    try {
+      const resumes = await localforage.getItem("resumes");
+      if (resumes) {
+        setResumes(resumes);
+        resumes[location.state?.index] &&
+          setResume(resumes[location.state?.index]);
+        loadedResumes.current = true;
+      } else {
+        console.warn("No resumes found in local storage.");
+      }
+    } catch (err) {
+      console.error("Error loading resumes from local storage:", err);
+    }
+  };
+
+  const loadSettings = async () => {
+    try {
+      const settings = await localforage.getItem("settings");
+      if (settings) {
+        setSettings(settings);
+      } else {
+        console.warn("No settings found in local storage.");
+      }
+    } catch (err) {
+      console.error("Error loading settings from local storage:", err);
+    }
+  };
+
+  /* --------------------------------- Savers --------------------------------- */
+  const saveResumes = async () => {
+    console.log(resume.order);
+    try {
+      let newResumes = [...resumes];
+      newResumes[location.state?.index] = resume;
+      await localforage.setItem("resumes", newResumes);
+    } catch (err) {
+      console.error("Error saving resume to local storage:", err);
+    }
+  };
+
+  /* ----------------------------- State Updaters ----------------------------- */
   const toggleItem = (key, value) => {
     const index = findContentIndexInProfile(key, value);
     if (index > -1) {
@@ -119,80 +187,7 @@ const Tailor = () => {
     setResume(newResume);
   };
 
-  const loadProfile = async () => {
-    try {
-      const profile = await localforage.getItem("profile");
-      if (profile) {
-        setProfile(profile);
-      } else {
-        // FIXME: Okay for now, but change the body to prompt the user to create a profile
-        console.error("No profile found in local storage.");
-      }
-    } catch (err) {
-      console.error("Error loading profile from local storage:", err);
-    }
-  };
-
-  const loadResumes = async () => {
-    try {
-      const resumes = await localforage.getItem("resumes");
-      if (resumes) {
-        setResumes(resumes);
-        resumes[location.state?.index] &&
-          setResume(resumes[location.state?.index]);
-        loadedResumes.current = true;
-      } else {
-        console.warn("No resumes found in local storage.");
-      }
-    } catch (err) {
-      console.error("Error loading resumes from local storage:", err);
-    }
-  };
-
-  const loadSettings = async () => {
-    try {
-      const settings = await localforage.getItem("settings");
-      if (settings) {
-        setSettings(settings);
-      } else {
-        console.warn("No settings found in local storage.");
-      }
-    } catch (err) {
-      console.error("Error loading settings from local storage:", err);
-    }
-  };
-
-  const saveResumes = async () => {
-    console.log(resume.order);
-    try {
-      let newResumes = [...resumes];
-      newResumes[location.state?.index] = resume;
-      await localforage.setItem("resumes", newResumes);
-    } catch (err) {
-      console.error("Error saving resume to local storage:", err);
-    }
-  };
-
-  useEffect(() => {
-    loadResumes();
-    loadProfile();
-    loadSettings();
-  }, []);
-
-  useEffect(() => {
-    loadedResumes.current && saveResumes();
-  }, [resumes, resume]);
-
-  const [resumeTransform, setResumeTransform] = useState(1);
-  useEffect(() => {
-    // This is on purpose. The function should run once, and then be reusable
-    const updateResumeTransform = setResumeTransform(
-      (0.9 * window.innerHeight) /
-        document.getElementById("resume-container").clientHeight
-    );
-    window.addEventListener("resize", updateResumeTransform);
-  }, []);
-
+  /* --------------------------------- Utility -------------------------------- */
   const resumeToHTML = () => {
     // Temporarily suppressing errors for rendering
     const originalConsoleError = console.error;
@@ -251,6 +246,32 @@ const Tailor = () => {
     });
   };
 
+  /* -------------------------------------------------------------------------- */
+  /*                                 Use Effects                                */
+  /* -------------------------------------------------------------------------- */
+  useEffect(() => {
+    loadResumes();
+    loadProfile();
+    loadSettings();
+  }, []);
+
+  useEffect(() => {
+    loadedResumes.current && saveResumes();
+  }, [resumes, resume]);
+
+  const [resumeTransform, setResumeTransform] = useState(1);
+  useEffect(() => {
+    // This is on purpose. The function should run once, and then be reusable
+    const updateResumeTransform = setResumeTransform(
+      (0.9 * window.innerHeight) /
+        document.getElementById("resume-container").clientHeight
+    );
+    window.addEventListener("resize", updateResumeTransform);
+  }, []);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Component                                 */
+  /* -------------------------------------------------------------------------- */
   return (
     <>
       <div id='tailor'>
@@ -313,9 +334,9 @@ const Tailor = () => {
                         <span style={{ display: "flex", gap: "1vmin" }}>
                           <Header large={false}>{title}</Header>
                           <button
-                          // onClick={() =>
-                          //   // TODO: Implement category delete
-                          // }
+                            onClick={() => {
+                              // TODO: Return the skills before nuking the category
+                            }}
                           >
                             <i className='fa-solid fa-xmark'></i>
                           </button>
