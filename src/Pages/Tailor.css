@@ -47,7 +47,7 @@
 }
 
 .active > * {
-  background: var(--positive);
+  background: var(--tertiary);
 }
 
 .active h6 {

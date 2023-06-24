@@ -42,6 +42,7 @@
   padding: 10px;
   color: var(--font-primary);
   margin-inline: 1vmin;
+  box-shadow: var(--shadow);
 }
 
 #settings label {
