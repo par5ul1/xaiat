@@ -171,18 +171,21 @@ const Tailor = () => {
       )
       .join("\n");
 
-    const finalHtml = `<!DOCTYPE html>
-<html>
-  <head>
-    <style>
-      ${stylesheet}
-    </style>
-  </head>
-  <body>
-    ${html}
-  </body>
-</html>
-`;
+    const finalHtml = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          ${stylesheet}
+        </style>
+      </head>
+      <body>
+        ${html}
+      </body>
+    </html>
+    `;
+
+    console.log(finalHtml);
 
     return finalHtml;
   };
