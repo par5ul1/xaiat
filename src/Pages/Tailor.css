@@ -61,3 +61,22 @@
 [data-rbd-draggable-id] .micro-card {
   cursor: grab !important;
 }
+
+/* Testing */
+@media print {
+  #tailor {
+    display: unset;
+  }
+
+  #sidebar {
+    display: none;
+  }
+
+  #resume-container {
+    transform: unset !important;
+    width: unset !important;
+    height: unset !important;
+    border-radius: 0 !important;
+    box-shadow: unset !important;
+  }
+}

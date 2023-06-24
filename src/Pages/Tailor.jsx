@@ -153,87 +153,6 @@ const Tailor = () => {
     return index;
   };
 
-  const resumeToHTML = () => {
-    // Temporarily suppressing errors for rendering
-    const originalConsoleError = console.error;
-    console.error = () => {};
-    const html = ReactDOMServer.renderToStaticMarkup(resumeComponent);
-
-    // Restore errors
-    console.error = originalConsoleError;
-
-    let stylesheet = "";
-
-    // Retrieve styles from <style> elements
-    Array.from(document.querySelectorAll("style")).forEach((styleElement) => {
-      const styleSheet = styleElement.sheet;
-      if (styleSheet) {
-        Array.from(styleSheet.cssRules).forEach((rule) => {
-          stylesheet += rule.cssText;
-        });
-      }
-    });
-
-    // Retrieve styles from <link> elements
-    Array.from(document.querySelectorAll('link[rel="stylesheet"]')).forEach(
-      (linkElement) => {
-        const href = linkElement.href;
-        if (href) {
-          try {
-            const response = fetch(href);
-            if (response.ok) {
-              const cssText = response.text();
-              stylesheet += cssText;
-            }
-          } catch (error) {
-            console.error(`Failed to fetch CSS file: ${href}`, error);
-          }
-        }
-      }
-    );
-
-    const finalHtml = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <style>
-          ${stylesheet}
-        </style>
-      </head>
-      <body>
-        ${html}
-      </body>
-    </html>
-    `;
-
-    console.log(stylesheet);
-
-    return finalHtml;
-  };
-
-  const handleDownload = () => {
-    const iframe = document.createElement("iframe");
-
-    iframe.width = "0";
-    iframe.height = "0";
-
-    document.body.appendChild(iframe);
-
-    (iframe.contentDocument || iframe.contentWindow.document).body.innerHTML =
-      resumeToHTML();
-
-    iframe.addEventListener("load", () => {
-      const title = document.title;
-      document.title = profile.Contact.name.split(" ").join("") + "_Resume";
-      iframe.contentWindow.print();
-
-      setTimeout(() => {
-        document.title = title;
-        // document.body.removeChild(iframe);
-      }, 100);
-    });
-  };
-
   /* -------------------------------------------------------------------------- */
   /*                                 Use Effects                                */
   /* -------------------------------------------------------------------------- */
@@ -268,7 +187,7 @@ const Tailor = () => {
             <button onClick={() => navigate(-1)}>
               <i className='fa-solid fa-arrow-left'></i>
             </button>
-            <button onClick={handleDownload}>
+            <button onClick={() => print()}>
               <i className='fa-solid fa-download'></i>
             </button>
           </div>
