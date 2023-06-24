@@ -2,6 +2,11 @@
 
 > Note: this is a work-in-progress. The code has still not been documented and certain behavior is subject to change. Still, the current code should be completely usable and free from major bugs.
 
+<img src="assets/xaiat_1.png" height="150">
+<img src="assets/xaiat_2.png" height="150">
+<img src="assets/xaiat_3.png" height="150">
+<img src="assets/xaiat_4.png" height="150">
+
 ## How do I use it?
 
 Two ways. You can either use a live version [here](https://xaiat.parsuli.net), or you can clone the repo and run it on your machine locally. The steps for that can be found below:
