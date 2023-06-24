@@ -105,7 +105,7 @@ const Settings = () => {
         <label>
           Accent Color:
           <input
-            value={settings.accentColor ? settings.accentColor : "#ffda00"}
+            value={settings.accentColor ? settings.accentColor : "#000000"}
             type='color'
             onChange={(event) => updateAccentColor(event.target.value)}
           />
