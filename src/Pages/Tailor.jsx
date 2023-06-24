@@ -184,7 +184,6 @@ const Tailor = () => {
 </html>
 `;
 
-    console.log(finalHtml);
     return finalHtml;
   };
 
@@ -278,7 +277,6 @@ const Tailor = () => {
           </Header>
           <DragDropContext
             onDragEnd={(result) => {
-              console.log(result);
               if (
                 !result.destination ||
                 result.destination.droppableId == "skills-Uncategorized"

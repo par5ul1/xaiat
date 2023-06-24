@@ -79,7 +79,6 @@ const Resume = ({
         </div>
         <DragDropContext
           onDragEnd={(result) => {
-            console.log(result);
             if (!result.destination) return;
             onReorder(result.source.index, result.destination.index);
           }}
