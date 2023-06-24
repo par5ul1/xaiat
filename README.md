@@ -2,10 +2,9 @@
 
 > Note: this is a work-in-progress. The code has still not been documented and certain behavior is subject to change. Still, the current code should be completely usable and free from major bugs.
 
-<img src="assets/xaiat_1.png" height="150">
-<img src="assets/xaiat_2.png" height="150">
-<img src="assets/xaiat_3.png" height="150">
-<img src="assets/xaiat_4.png" height="150">
+![](assets/xaiat_1.png)
+![](assets/xaiat_2.png)
+![](assets/xaiat_3.png)
 
 ## How do I use it?
 
