@@ -167,7 +167,7 @@ const Home = () => {
               <br />
               <br />
               TL;DR: In order to{" "}
-              <a href='https://youtube.com/shorts/VL9esLIkabs'>
+              <a target='_blank' href='https://youtube.com/shorts/VL9esLIkabs'>
                 gift wrap your resume in our 4D suit
               </a>
               , we need to measure you. Get measured{" "}
