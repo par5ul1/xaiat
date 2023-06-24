@@ -153,64 +153,6 @@ const Tailor = () => {
     return index;
   };
 
-  const resumeToHTML = () => {
-    // Temporarily suppressing errors for rendering
-    const originalConsoleError = console.error;
-    console.error = () => {};
-    const html = ReactDOMServer.renderToStaticMarkup(resumeComponent);
-
-    // Restore errors
-    console.error = originalConsoleError;
-
-    const stylesheet = Array.from(document.styleSheets)
-      .filter((sheet) => sheet.href === null)
-      .map((sheet) =>
-        Array.from(sheet.cssRules)
-          .map((rule) => rule.cssText)
-          .join("\n")
-      )
-      .join("\n");
-
-    const finalHtml = `<!DOCTYPE html>
-<html>
-  <head>
-    <style>
-      ${stylesheet}
-    </style>
-  </head>
-  <body>
-    ${html}
-  </body>
-</html>
-`;
-
-    console.log(finalHtml);
-    return finalHtml;
-  };
-
-  const handleDownload = () => {
-    const iframe = document.createElement("iframe");
-
-    iframe.width = "0";
-    iframe.height = "0";
-
-    document.body.appendChild(iframe);
-
-    (iframe.contentDocument || iframe.contentWindow.document).body.innerHTML =
-      resumeToHTML();
-
-    iframe.addEventListener("load", () => {
-      const title = document.title;
-      document.title = profile.Contact.name.split(" ").join("") + "_Resume";
-      iframe.contentWindow.print();
-
-      setTimeout(() => {
-        document.title = title;
-        document.body.removeChild(iframe);
-      }, 100);
-    });
-  };
-
   /* -------------------------------------------------------------------------- */
   /*                                 Use Effects                                */
   /* -------------------------------------------------------------------------- */
@@ -245,7 +187,7 @@ const Tailor = () => {
             <button onClick={() => navigate(-1)}>
               <i className='fa-solid fa-arrow-left'></i>
             </button>
-            <button onClick={handleDownload}>
+            <button onClick={() => print()}>
               <i className='fa-solid fa-download'></i>
             </button>
           </div>
@@ -278,7 +220,6 @@ const Tailor = () => {
           </Header>
           <DragDropContext
             onDragEnd={(result) => {
-              console.log(result);
               if (
                 !result.destination ||
                 result.destination.droppableId == "skills-Uncategorized"

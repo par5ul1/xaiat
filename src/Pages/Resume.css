@@ -18,6 +18,7 @@
 @media print {
   #resume {
     padding: 0;
+    padding-right: 0.25in;
   }
 
   #resume section:hover > h2 span {

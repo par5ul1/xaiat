@@ -304,6 +304,12 @@ const Profile = () => {
       </section>
 
       <br />
+
+      <button onClick={() => navigate(-1)} className='save-btn'>
+        Save
+      </button>
+
+      <br />
     </>
   );
 };

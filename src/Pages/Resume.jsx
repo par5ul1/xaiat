@@ -39,15 +39,17 @@ const Resume = ({
 
   return (
     <>
-      <style>
-        {`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
           #resume * {
             font-family: ${
-              settings?.font ? `"${settings.font}"` : `"Open Sans"`
+              settings?.font ? `'${settings.font}'` : `'Open Sans'`
             }
           }
-        `}
-      </style>
+        `
+        }}
+      />
       <div id='resume'>
         <div id='resume-header'>
           <h1>{contacts.name}</h1>
@@ -79,7 +81,6 @@ const Resume = ({
         </div>
         <DragDropContext
           onDragEnd={(result) => {
-            console.log(result);
             if (!result.destination) return;
             onReorder(result.source.index, result.destination.index);
           }}

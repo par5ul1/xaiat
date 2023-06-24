@@ -147,10 +147,10 @@ const Home = () => {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: "50%"
+              width: "60%"
             }}
           >
-            <h1>Welcome to Xaiat!</h1>
+            <h1>Welcome to Xaiat! 🪡</h1>
             <p>
               We'll get to building and tailoring your resumes in just a moment.
               Right now, it seems you don't have a profile set up, so we don't
@@ -166,9 +166,13 @@ const Home = () => {
               Xaiat before.
               <br />
               <br />
-              TL;DR: In order to gift wrap your resume in our 4D suit, we need
-              to measure you. Get measured <Link to={"profile"}>here</Link> or
-              enter your measurements <Link to={"settings"}>here</Link>.
+              TL;DR: In order to{" "}
+              <a target='_blank' href='https://youtube.com/shorts/VL9esLIkabs'>
+                gift wrap your resume in our 4D suit
+              </a>
+              , we need to measure you. Get measured{" "}
+              <Link to={"profile"}>here</Link> or enter your measurements{" "}
+              <Link to={"settings"}>here</Link>.
             </p>
           </div>
         </>
