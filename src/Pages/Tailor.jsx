@@ -205,7 +205,7 @@ const Tailor = () => {
 
       setTimeout(() => {
         document.title = title;
-        document.body.removeChild(iframe);
+        // document.body.removeChild(iframe);
       }, 100);
     });
   };

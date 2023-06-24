@@ -197,7 +197,7 @@ hr {
   height: fit-content;
   border: none;
   padding: 10px;
-  background: var(--accent);
+  background: var(--positive);
   border-radius: 10px;
   box-shadow: var(--shadow);
 }

@@ -3,10 +3,13 @@ import "./Settings.css";
 import { useEffect, useRef } from "react";
 
 import localforage from "localforage";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const Settings = () => {
   const [settings, setSettings] = useState({});
+
+  const navigate = useNavigate();
 
   const exportProfile = async () => {
     try {
@@ -83,6 +86,9 @@ const Settings = () => {
 
   return (
     <>
+      <button className='back-btn' onClick={() => navigate(-1)}>
+        <i className='fa-solid fa-arrow-left'></i>
+      </button>
       <section id='header'>
         <h1>Settings</h1>
       </section>
