@@ -162,14 +162,35 @@ const Tailor = () => {
     // Restore errors
     console.error = originalConsoleError;
 
-    const stylesheet = Array.from(document.styleSheets)
-      .filter((sheet) => sheet.href === null)
-      .map((sheet) =>
-        Array.from(sheet.cssRules)
-          .map((rule) => rule.cssText)
-          .join("\n")
-      )
-      .join("\n");
+    let stylesheet = "";
+
+    // Retrieve styles from <style> elements
+    Array.from(document.querySelectorAll("style")).forEach((styleElement) => {
+      const styleSheet = styleElement.sheet;
+      if (styleSheet) {
+        Array.from(styleSheet.cssRules).forEach((rule) => {
+          stylesheet += rule.cssText;
+        });
+      }
+    });
+
+    // Retrieve styles from <link> elements
+    Array.from(document.querySelectorAll('link[rel="stylesheet"]')).forEach(
+      (linkElement) => {
+        const href = linkElement.href;
+        if (href) {
+          try {
+            const response = fetch(href);
+            if (response.ok) {
+              const cssText = response.text();
+              stylesheet += cssText;
+            }
+          } catch (error) {
+            console.error(`Failed to fetch CSS file: ${href}`, error);
+          }
+        }
+      }
+    );
 
     const finalHtml = `
     <!DOCTYPE html>
@@ -185,7 +206,7 @@ const Tailor = () => {
     </html>
     `;
 
-    console.log(finalHtml);
+    console.log(stylesheet);
 
     return finalHtml;
   };
