@@ -10,11 +10,13 @@ import { useState } from "react";
 
 const ProjectModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
   const [tempData, setTempData] = useState({
-    name: data ? data.name : "",
-    shortDescription: data ? data.shortDescription : "",
-    date: data ? data.date : "",
-    descriptions: data ? data.descriptions : [],
-    used: data ? data.used : []
+    name: data && data.name ? data.name : "",
+    link: data && data.link ? data.link : "",
+    shortDescription:
+      data && data.shortDescription ? data.shortDescription : "",
+    date: data && data.date ? data.date : "",
+    descriptions: data && data.descriptions ? data.descriptions : [],
+    used: data && data.used ? data.used : []
   });
 
   const updateTempData = (key, value) => {
@@ -47,6 +49,14 @@ const ProjectModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
                 placeholder='e.g. Custom Vespa'
                 inputValue={tempData.name}
                 updateInputValue={(val) => updateTempData("name", val)}
+              ></TextInput>
+            </div>
+
+            <div>
+              <TextInput
+                label='Link'
+                inputValue={tempData.link}
+                updateInputValue={(val) => updateTempData("link", val)}
               ></TextInput>
             </div>
 
@@ -111,7 +121,7 @@ const ProjectModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
             toggleModal={toggleModal}
             onDelete={onDelete}
             onSave={onSave}
-            canSave={tempData.name.length > 0 && tempData.date.length > 0}
+            canSave={tempData.name.length && tempData.date.length}
             data={tempData}
             isNew={!data}
           ></ModalFooter>

@@ -15,6 +15,7 @@ import MicroCard from "../Components/Cards/MicroCard";
 import Resume from "./Resume";
 import TextInput from "../Components/General/TextInput";
 import localforage from "localforage";
+import { useImmer } from "use-immer";
 
 /*
   This component is the tailoring page. It allows the user to build up their tailored resumes.
@@ -27,11 +28,11 @@ const Tailor = () => {
   /*                                   States                                   */
   /* -------------------------------------------------------------------------- */
   // XXX: Potential derived states
-  const [resumes, setResumes] = useState([]);
-  const [resume, setResume] = useState({ title: "", content: {}, order: [] });
   const [settings, setSettings] = useState({});
 
-  const [profile, setProfile] = useState({
+  const [resumes, setResumes] = useState([]);
+  const [resume, setResume] = useImmer({ title: "", content: {}, order: [] });
+  const [profile, setProfile] = useImmer({
     Contact: {
       name: "",
       email: "",
@@ -57,12 +58,7 @@ const Tailor = () => {
       settings={settings}
       onReorder={(src, dst) => {
         setResume((resume) => {
-          const temp = resume.order.splice(src, 1)[0];
-
-          const newOrder = resume.order;
-          newOrder.splice(dst, 0, temp);
-
-          return { ...resume, order: newOrder };
+          resume.order.splice(dst, 0, resume.order.splice(src, 1)[0]);
         });
       }}
     />
@@ -119,7 +115,6 @@ const Tailor = () => {
 
   /* --------------------------------- Savers --------------------------------- */
   const saveResumes = async () => {
-    console.log(resume.order);
     try {
       let newResumes = [...resumes];
       newResumes[location.state?.index] = resume;
@@ -133,35 +128,23 @@ const Tailor = () => {
   const toggleItem = (key, value) => {
     const index = findContentIndexInProfile(key, value);
     if (index > -1) {
-      let newItem = [...resume.content[key]];
-      newItem.splice(index, 1);
-
-      let newOrder = [...resume.order];
-      !newItem.length && newOrder.splice(resume.order.indexOf(key), 1);
-      setResume({
-        ...resume,
-        order: newOrder,
-        content: {
-          ...resume.content,
-          [key]: newItem
-        }
+      // Remove key
+      setResume((resume) => {
+        resume.content[key].splice(index, 1);
+        !resume.content[key].length &&
+          resume.order.splice(resume.order.indexOf(key), 1);
       });
     } else {
-      const newOrder =
-        resume.order.indexOf(key) > -1 ? resume.order : [...resume.order, key];
-      setResume({
-        ...resume,
-        order: newOrder,
-        content: {
-          ...resume.content,
-          [key]: resume.content?.[key]
-            ? [...resume.content[key], value]
-            : [value]
-        }
+      // Add key
+      setResume((resume) => {
+        resume.order.indexOf(key) < 0 && resume.order.push(key);
+        !resume.content?.[key] && (resume.content[key] = []);
+        resume.content[key].push(value);
       });
     }
   };
 
+  /* --------------------------------- Utility -------------------------------- */
   const findContentIndexInProfile = (key, value) => {
     let index = -1;
     resume.content?.[key]?.forEach((item, i) => {
@@ -170,24 +153,6 @@ const Tailor = () => {
     return index;
   };
 
-  // TEMP: This should go once I move to Immer or something. For now, I'll make it work.
-  const addSkillToCategory = (category, skill) => {
-    let newResume = { ...resume };
-    newResume.content?.Skills?.map((skillEntry) => {
-      if (skillEntry.title == category) skillEntry.skills.push(skill);
-    });
-    setResume(newResume);
-  };
-
-  const removeSkillFromCategory = (category, index) => {
-    let newResume = { ...resume };
-    newResume.content?.Skills?.map((skillEntry) => {
-      if (skillEntry.title == category) skillEntry.skills.splice(index, 1);
-    });
-    setResume(newResume);
-  };
-
-  /* --------------------------------- Utility -------------------------------- */
   const resumeToHTML = () => {
     // Temporarily suppressing errors for rendering
     const originalConsoleError = console.error;
@@ -319,10 +284,21 @@ const Tailor = () => {
                 result.destination.droppableId == "skills-Uncategorized"
               )
                 return;
-              addSkillToCategory(
-                result.destination.droppableId.split("-")[1],
-                profile.Skills[result.source.index]
-              );
+              // Add Skill to category
+              setResume((resume) => {
+                resume.content?.Skills?.map((skillEntry) => {
+                  if (
+                    skillEntry.title ==
+                    result.destination.droppableId.split("-")[1]
+                  )
+                    skillEntry.skills.push(profile.Skills[result.source.index]);
+                });
+              });
+
+              // Remove Skill from uncategorized
+              setProfile((profile) => {
+                profile.Skills.splice(result.source.index, 1);
+              });
             }}
           >
             {resume.content.Skills &&
@@ -335,6 +311,20 @@ const Tailor = () => {
                           <Header large={false}>{title}</Header>
                           <button
                             onClick={() => {
+                              resume.content?.Skills?.map(
+                                (skillEntry, index) => {
+                                  if (skillEntry.title == title) {
+                                    skillEntry.skills.map((skill) => {
+                                      setProfile((profile) => {
+                                        profile.Skills.push(skill);
+                                      });
+                                    });
+                                    setResume((resume) => {
+                                      resume.content?.Skills?.splice(index, 1);
+                                    });
+                                  }
+                                }
+                              );
                               // TODO: Return the skills before nuking the category
                             }}
                           >
@@ -349,9 +339,20 @@ const Tailor = () => {
                                   key={"skill" + index}
                                   width='auto'
                                   value={skill}
-                                  onDelete={() =>
-                                    removeSkillFromCategory(title, index)
-                                  }
+                                  onDelete={() => {
+                                    setProfile((profile) => {
+                                      profile.Skills.push(skill);
+                                    });
+
+                                    setResume((resume) => {
+                                      resume.content?.Skills?.map(
+                                        (skillEntry) => {
+                                          if (skillEntry.title == title)
+                                            skillEntry.skills.splice(index, 1);
+                                        }
+                                      );
+                                    });
+                                  }}
                                 />
                               </div>
                             );

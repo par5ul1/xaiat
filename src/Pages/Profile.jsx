@@ -64,10 +64,6 @@ const Profile = () => {
   const loadProfile = async () => {
     try {
       const profile = await localforage.getItem("profile");
-      // XXX: The code below will load from a json file. Implement later
-      // const profile = await fetch("jsons/profile.json").then((response) =>
-      //   response.json()
-      // );
       if (profile) {
         setProfile(profile);
         profileLoaded.current = true;

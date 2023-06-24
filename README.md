@@ -4,7 +4,7 @@
 
 ## How do I use it?
 
-Two ways. You can either use a live version [here](#) (Not Currently Live), or you can clone the repo and run it on your machine locally. The steps for that can be found below:
+Two ways. You can either use a live version [here](https://xaiat.parsuli.net), or you can clone the repo and run it on your machine locally. The steps for that can be found below:
 
 ## Dependencies
 
@@ -24,8 +24,6 @@ There is currently only one template available, and you can only customize the a
 
 ## TODOs:
 
-- [ ] Delete skills as they get added to categories, and allow categories to be deleted
-
 - [ ] Allow for reordering of individual skills, experiences or projects
 
 - [ ] Add better documentation to the source code
@@ -36,7 +34,9 @@ There is currently only one template available, and you can only customize the a
 
 - [ ] Attempt to sort items by date
 
-- [ ] Validate links before trying to hyperlink them in the resume
+- [ ] Convert complex states to use useReducer, use useCallback where appropriate and othe React optimizations
+
+- [ ] Migrate to Immer for state changes
 
 - [ ] Make small cards editable instead of forcing deletion and recreation.
 

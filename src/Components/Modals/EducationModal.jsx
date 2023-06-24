@@ -117,9 +117,9 @@ const EducationModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
             onDelete={onDelete}
             onSave={onSave}
             canSave={
-              tempData.institution.length > 0 &&
-              tempData.startDate.length > 0 &&
-              tempData.endDate.length > 0
+              tempData.institution.length &&
+              tempData.startDate.length &&
+              tempData.endDate.length
             }
             data={tempData}
             isNew={!data}
