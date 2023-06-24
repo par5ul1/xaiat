@@ -7,6 +7,7 @@ const TextInput = ({
   placeholder,
   hint,
   width = "35vw",
+  expandable = false,
   updateInputValue,
   inputValue,
   handleSubmit
@@ -21,16 +22,30 @@ const TextInput = ({
           <br />
         </>
       )}
-      <input
-        onChange={(e) => updateInputValue(e.target.value)}
-        onKeyDown={(e) => (e.key == "Enter" ? handleSubmit() : true)}
-        style={{ width }}
-        type='text'
-        placeholder={placeholder}
-        value={inputValue}
-        data-lpignore
-        autoComplete='false'
-      />
+      {expandable ? (
+        <textarea
+          rows={1}
+          onChange={(e) => updateInputValue(e.target.value)}
+          onKeyDown={(e) => (e.key == "Enter" ? handleSubmit() : true)}
+          style={{ width }}
+          type='text'
+          placeholder={placeholder}
+          value={inputValue}
+          data-lpignore
+          autoComplete='false'
+        />
+      ) : (
+        <input
+          onChange={(e) => updateInputValue(e.target.value)}
+          onKeyDown={(e) => (e.key == "Enter" ? handleSubmit() : true)}
+          style={{ width }}
+          type='text'
+          placeholder={placeholder}
+          value={inputValue}
+          data-lpignore
+          autoComplete='false'
+        />
+      )}
     </label>
   );
 };

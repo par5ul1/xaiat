@@ -123,7 +123,8 @@ const ExperienceModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
               onAdd={(val) =>
                 updateTempData("descriptions", [...tempData.descriptions, val])
               }
-              placeholder='Enter bullet points'
+              expandable={true}
+              placeholder='Enter bullet points one at a time'
             ></AddableTextInput>
           </div>
 
@@ -132,10 +133,10 @@ const ExperienceModal = ({ isOpen, toggleModal, data, onDelete, onSave }) => {
             onDelete={onDelete}
             onSave={onSave}
             canSave={
-              tempData.company.length > 0 &&
-              tempData.titles[0].title.length > 0 &&
-              tempData.titles[0].startDate.length > 0 &&
-              tempData.titles[0].endDate.length > 0
+              tempData.company.length &&
+              tempData.titles[0].title.length &&
+              tempData.titles[0].startDate.length &&
+              tempData.titles[0].endDate.length
             }
             data={tempData}
             isNew={!data}

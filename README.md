@@ -4,7 +4,7 @@
 
 ## How do I use it?
 
-Two ways. You can either use a live version [here](#) (Not Currently Live), or you can clone the repo and run it on your machine locally. The steps for that can be found below:
+Two ways. You can either use a live version [here](https://xaiat.parsuli.net), or you can clone the repo and run it on your machine locally. The steps for that can be found below:
 
 ## Dependencies
 
@@ -24,21 +24,23 @@ There is currently only one template available, and you can only customize the a
 
 ## TODOs:
 
+- [ ] Allow for reordering of individual skills, experiences or projects
+
 - [ ] Add better documentation to the source code
+
+- [ ] Allow the user to modify profile locally per-resume
 
 - [ ] Add a WYSIWYG instead of allowing users to write custom HTML tags
 
 - [ ] Attempt to sort items by date
 
-- [ ] Allow for expanding inputs for bullet points
+- [ ] Convert complex states to use useReducer, use useCallback where appropriate and othe React optimizations
 
-- [ ] Validate links before trying to hyperlink them in the resume
-
-- [ ] Allow the user to modify profile locally per-resume
+- [ ] Migrate to Immer for state changes
 
 - [ ] Make small cards editable instead of forcing deletion and recreation.
 
-- [ ] Change the profile auto-save
+- [ ] Add refresh guard when modals are open
 
 - [ ] Create a standard for custom resume templates
 

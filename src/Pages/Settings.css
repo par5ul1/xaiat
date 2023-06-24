@@ -10,3 +10,42 @@
   padding: 10px;
   box-shadow: var(--shadow);
 }
+
+#settings a,
+#settings input {
+  width: fit-content;
+  margin: 0;
+}
+
+#settings input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  width: 5vmin;
+  height: 5vmin;
+  border: none;
+  cursor: pointer;
+}
+#settings input[type="color"]::-webkit-color-swatch {
+  border-radius: 10px;
+}
+#settings input[type="color"]::-moz-color-swatch {
+  border-radius: 10px;
+}
+
+#settings select {
+  font-size: var(--small-sz);
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  color: var(--font-primary);
+  margin-inline: 1vmin;
+}
+
+#settings label {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}

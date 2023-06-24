@@ -18,8 +18,7 @@ const Resume = ({
   const itemSeparator = (
     <span
       style={{
-        color: settings?.accentColor ? settings.accentColor : "#000000",
-        margin: "-2.5pt"
+        color: settings?.accentColor ? settings.accentColor : "#000000"
       }}
     >
       &ensp;∎&ensp;
@@ -40,6 +39,15 @@ const Resume = ({
 
   return (
     <>
+      <style>
+        {`
+          #resume * {
+            font-family: ${
+              settings?.font ? `"${settings.font}"` : `"Open Sans"`
+            }
+          }
+        `}
+      </style>
       <div id='resume'>
         <div id='resume-header'>
           <h1>{contacts.name}</h1>
@@ -47,7 +55,15 @@ const Resume = ({
             {links.map((link, index) => {
               return (
                 <span id={"link" + index}>
-                  <a href={link}>{link}</a>
+                  <a
+                    href={
+                      (link.startsWith("http://") || link.startsWith("https://")
+                        ? ""
+                        : "http://") + link
+                    }
+                  >
+                    {link}
+                  </a>
                   {index < links.length - 1 && itemSeparator}
                 </span>
               );
@@ -65,8 +81,6 @@ const Resume = ({
           onDragEnd={(result) => {
             console.log(result);
             if (!result.destination) return;
-
-            // TODO: Allow for changes to persist
             onReorder(result.source.index, result.destination.index);
           }}
         >
@@ -80,64 +94,16 @@ const Resume = ({
                     let body = [];
                     switch (category) {
                       case "Education":
-                        info.Education.map((education) => {
-                          body.push(
-                            <>
-                              <h3
-                                dangerouslySetInnerHTML={{
-                                  __html: DOMPurify.sanitize(
-                                    education.institution
-                                  )
-                                }}
-                              />
-                              <p
-                                dangerouslySetInnerHTML={{
-                                  __html: DOMPurify.sanitize(education.degree)
-                                }}
-                              />
-                              <ul>
-                                {education.awards.map((award) => (
-                                  <li
-                                    dangerouslySetInnerHTML={{
-                                      __html: DOMPurify.sanitize(award)
-                                    }}
-                                  />
-                                ))}
-                              </ul>
-                              <h3>Relevant Coursework</h3>
-                              <div>
-                                {education.courses.map((course, index) => {
-                                  return (
-                                    <>
-                                      <p
-                                        dangerouslySetInnerHTML={{
-                                          __html: DOMPurify.sanitize(course)
-                                        }}
-                                      />
-                                      {index < education.courses.length - 1 &&
-                                        itemSeparator}
-                                    </>
-                                  );
-                                })}
-                              </div>
-                            </>
-                          );
-                        });
-                        break;
-                      case "Work Experience":
-                        info["Work Experience"].map((experience) => {
-                          body.push(
-                            <>
-                              <h3
-                                dangerouslySetInnerHTML={{
-                                  __html: DOMPurify.sanitize(experience.company)
-                                }}
-                              />
-                              {experience.titles.map((title) => (
+                        <DragDropContext>
+                          {info.Education.map((education) => {
+                            body.push(
+                              <div class='resume-content-block'>
                                 <div className='two-columns'>
-                                  <h4
+                                  <h3
                                     dangerouslySetInnerHTML={{
-                                      __html: DOMPurify.sanitize(title.title)
+                                      __html: DOMPurify.sanitize(
+                                        education.institution
+                                      )
                                     }}
                                   />
                                   <h4>
@@ -145,7 +111,7 @@ const Resume = ({
                                       <span
                                         dangerouslySetInnerHTML={{
                                           __html: DOMPurify.sanitize(
-                                            title.startDate
+                                            education.startDate
                                           )
                                         }}
                                       />
@@ -153,30 +119,192 @@ const Resume = ({
                                       <span
                                         dangerouslySetInnerHTML={{
                                           __html: DOMPurify.sanitize(
-                                            title.endDate
+                                            education.endDate
                                           )
                                         }}
                                       />
                                     </i>
                                   </h4>
                                 </div>
-                              ))}
-                              <ul>
-                                {experience.descriptions.map((bullet) => (
-                                  <li
+                                <p
+                                  dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(education.degree)
+                                  }}
+                                />
+                                <ul>
+                                  {education.awards.map((award) => (
+                                    <li
+                                      dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(award)
+                                      }}
+                                    />
+                                  ))}
+                                </ul>
+                                {education.courses &&
+                                  education.courses.length > 0 && (
+                                    <h3>Relevant Coursework</h3>
+                                  )}
+                                <div>
+                                  {education.courses.map((course, index) => {
+                                    return (
+                                      <>
+                                        <p
+                                          dangerouslySetInnerHTML={{
+                                            __html: DOMPurify.sanitize(course)
+                                          }}
+                                        />
+                                        {index < education.courses.length - 1 &&
+                                          itemSeparator}
+                                      </>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </DragDropContext>;
+                        break;
+                      case "Work Experience":
+                        <DragDropContext>
+                          <Droppable droppableId={"experience-dropzone"}>
+                            {info["Work Experience"].map((experience) => {
+                              body.push(
+                                <div class='resume-content-block'>
+                                  <h3
                                     dangerouslySetInnerHTML={{
-                                      __html: DOMPurify.sanitize(bullet)
+                                      __html: DOMPurify.sanitize(
+                                        experience.company
+                                      )
                                     }}
                                   />
-                                ))}
-                              </ul>
-                            </>
-                          );
-                        });
+                                  {experience.titles.map((title) => (
+                                    <div className='two-columns'>
+                                      <h4
+                                        dangerouslySetInnerHTML={{
+                                          __html: DOMPurify.sanitize(
+                                            title.title
+                                          )
+                                        }}
+                                      />
+                                      <h4>
+                                        <i>
+                                          <span
+                                            dangerouslySetInnerHTML={{
+                                              __html: DOMPurify.sanitize(
+                                                title.startDate
+                                              )
+                                            }}
+                                          />
+                                          {" - "}
+                                          <span
+                                            dangerouslySetInnerHTML={{
+                                              __html: DOMPurify.sanitize(
+                                                title.endDate
+                                              )
+                                            }}
+                                          />
+                                        </i>
+                                      </h4>
+                                    </div>
+                                  ))}
+                                  <ul>
+                                    {experience.descriptions.map((bullet) => (
+                                      <li
+                                        dangerouslySetInnerHTML={{
+                                          __html: DOMPurify.sanitize(bullet)
+                                        }}
+                                      />
+                                    ))}
+                                  </ul>
+                                </div>
+                              );
+                            })}
+                          </Droppable>
+                        </DragDropContext>;
+                        break;
+                      case "Projects":
+                        <DragDropContext>
+                          {info.Projects.map((project) => {
+                            body.push(
+                              // TODO: Make every other thing a content block too!
+                              <div class='resume-content-block'>
+                                <div className='two-columns'>
+                                  <span>
+                                    {project.link && project.link != "" ? (
+                                      <a
+                                        href={
+                                          (project.link.startsWith("http://") ||
+                                          project.link.startsWith("https://")
+                                            ? ""
+                                            : "http://") + project.link
+                                        }
+                                      >
+                                        <h3
+                                          style={{ display: "inline" }}
+                                          dangerouslySetInnerHTML={{
+                                            __html: DOMPurify.sanitize(
+                                              project.name
+                                            )
+                                          }}
+                                        />
+                                      </a>
+                                    ) : (
+                                      <h3
+                                        style={{ display: "inline" }}
+                                        dangerouslySetInnerHTML={{
+                                          __html: DOMPurify.sanitize(
+                                            project.name
+                                          )
+                                        }}
+                                      />
+                                    )}
+                                    {project.used.length && itemSeparator}
+                                    {project.used.map((skill, index) => (
+                                      <>
+                                        <h3 style={{ display: "inline" }}>
+                                          {skill}
+                                        </h3>
+                                        {index < project.used.length - 1 &&
+                                          ", "}
+                                      </>
+                                    ))}
+                                  </span>
+                                  <h4>
+                                    <i>
+                                      <span
+                                        dangerouslySetInnerHTML={{
+                                          __html: DOMPurify.sanitize(
+                                            project.date
+                                          )
+                                        }}
+                                      />
+                                    </i>
+                                  </h4>
+                                </div>
+                                <h4
+                                  dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(
+                                      project.shortDescription
+                                    )
+                                  }}
+                                />
+                                <ul>
+                                  {project.descriptions.map((bullet) => (
+                                    <li
+                                      dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(bullet)
+                                      }}
+                                    />
+                                  ))}
+                                </ul>
+                              </div>
+                            );
+                          })}
+                        </DragDropContext>;
                         break;
                       case "Interests":
                         body.push(
-                          <>
+                          <div class='resume-content-block'>
                             <div>
                               {info.Interests.map((interest, index) => (
                                 <>
@@ -186,67 +314,14 @@ const Resume = ({
                                 </>
                               ))}
                             </div>
-                          </>
+                          </div>
                         );
-                        break;
-                      case "Projects":
-                        info.Projects.map((project) => {
-                          body.push(
-                            <>
-                              <div className='two-columns'>
-                                <span>
-                                  <h3
-                                    style={{ display: "inline" }}
-                                    dangerouslySetInnerHTML={{
-                                      __html: DOMPurify.sanitize(project.name)
-                                    }}
-                                  />
-                                  {/* XXX: Consider getting rid of > 0 since javascript truthy */}
-                                  {project.used.length > 0 && itemSeparator}
-                                  {project.used.map((skill, index) => (
-                                    <>
-                                      <h3 style={{ display: "inline" }}>
-                                        {skill}
-                                      </h3>
-                                      {index < project.used.length - 1 && ", "}
-                                    </>
-                                  ))}
-                                </span>
-                                <h4>
-                                  <i>
-                                    <span
-                                      dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(project.date)
-                                      }}
-                                    />
-                                  </i>
-                                </h4>
-                              </div>
-                              <h4
-                                dangerouslySetInnerHTML={{
-                                  __html: DOMPurify.sanitize(
-                                    project.shortDescription
-                                  )
-                                }}
-                              />
-                              <ul>
-                                {project.descriptions.map((bullet) => (
-                                  <li
-                                    dangerouslySetInnerHTML={{
-                                      __html: DOMPurify.sanitize(bullet)
-                                    }}
-                                  />
-                                ))}
-                              </ul>
-                            </>
-                          );
-                        });
                         break;
                       case "Skills":
                         info.Skills.map(({ title, skills }) => {
                           body.push(
-                            <>
-                              <div className='two-columns'>
+                            <div class='resume-content-block'>
+                              <div>
                                 <h3
                                   style={{ display: "inline" }}
                                   dangerouslySetInnerHTML={{
@@ -254,6 +329,7 @@ const Resume = ({
                                   }}
                                 />
                                 <span>
+                                  {": "}
                                   {skills.map((skill, index) => (
                                     <>
                                       <p style={{ display: "inline" }}>
@@ -265,7 +341,7 @@ const Resume = ({
                                   ))}
                                 </span>
                               </div>
-                            </>
+                            </div>
                           );
                         });
                         break;

@@ -96,7 +96,9 @@ h6 {
   color: var(--font-secondary);
 }
 
-input {
+input,
+textarea {
+  max-width: 65vw;
   border: none;
   background: var(--secondary);
   color: var(--font-primary);
@@ -105,13 +107,15 @@ input {
 }
 
 input:focus,
+textarea:focus,
 button:focus {
   outline: none;
   box-shadow: 0 0 0 0.08em var(--font-primary);
   transition: box-shadow 0.3s ease-in-out;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: var(--font-secondary);
 }
 
@@ -189,6 +193,7 @@ hr {
 
 .add-btn {
   width: 10vmin;
+  height: fit-content;
   border: none;
   padding: 10px;
   background: var(--accent);
@@ -246,6 +251,21 @@ hr {
   position: absolute;
   top: 5vmin;
   right: 5vmin;
+  display: flex;
+  width: 5vmin;
+  height: 5vmin;
+  border: none;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  background: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.back-btn {
+  position: fixed;
+  top: 5vmin;
+  left: 5vmin;
   display: flex;
   width: 5vmin;
   height: 5vmin;

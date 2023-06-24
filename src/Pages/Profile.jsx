@@ -1,7 +1,7 @@
 import "./Profile.css";
 
 import { Link, json, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Card from "../Components/Cards/Card";
 import CardAdder from "../Components/Cards/Adders/CardAdder";
@@ -51,6 +51,8 @@ const Profile = () => {
     });
   };
 
+  const profileLoaded = useRef(false);
+
   const saveProfile = async () => {
     try {
       await localforage.setItem("profile", profile);
@@ -62,12 +64,9 @@ const Profile = () => {
   const loadProfile = async () => {
     try {
       const profile = await localforage.getItem("profile");
-      // XXX: The code below will load from a json file. Implement later
-      // const profile = await fetch("jsons/profile.json").then((response) =>
-      //   response.json()
-      // );
       if (profile) {
         setProfile(profile);
+        profileLoaded.current = true;
       } else {
         console.warn("No profile found in local storage.");
       }
@@ -80,8 +79,16 @@ const Profile = () => {
     loadProfile();
   }, []);
 
+  // Auto-save
+  useEffect(() => {
+    profileLoaded && saveProfile();
+  }, [profile]);
+
   return (
     <>
+      <button className='back-btn' onClick={() => navigate(-1)}>
+        <i className='fa-solid fa-arrow-left'></i>
+      </button>
       <section id='header'>
         <h1>Tell us all* about yourself!</h1>
         <h4>
@@ -296,23 +303,7 @@ const Profile = () => {
         ></MicroCardAdder>
       </section>
 
-      <section id='terminal-btns' className='container'>
-        <button
-          className='cancel-btn'
-          onClick={() => confirm("Confirm Cancel") && navigate("/")}
-        >
-          Cancel
-        </button>
-        <button
-          className='save-btn'
-          onClick={() => {
-            saveProfile();
-            navigate("/");
-          }}
-        >
-          Save
-        </button>
-      </section>
+      <br />
     </>
   );
 };
