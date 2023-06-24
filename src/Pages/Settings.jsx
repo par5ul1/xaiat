@@ -100,6 +100,7 @@ const Settings = () => {
             <option value='Arial'>Arial</option>
             <option value='Helvetica'>Helvetica</option>
             <option value='Times New Roman'>Times New Roman</option>
+            <option value='Playfair Display'>Playfair Display</option>
           </select>
         </label>
         <label>
